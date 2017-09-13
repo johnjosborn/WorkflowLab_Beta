@@ -27,11 +27,12 @@ if (isset($_GET['email']) && isset($_GET['t'])){
 
         $row = $result->fetch_assoc();
 
-        $existingVer = $row['USR_ver'];
+        $existingVer = $row['USR_hash'];
 
-        if ($existingVer == 0){
+        if ($existingVer == 1){
 
             $code .='2'; //2 already verified
+
         } else if ($existingVer == $token) {
 
             $code .= '0'; //verified, unlock
@@ -44,6 +45,7 @@ $result=mysqli_query($conn,$sql);
 
 
         } else {
+
             $code .= '3'; //token doesn't match
 
         }

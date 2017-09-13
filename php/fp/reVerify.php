@@ -9,8 +9,8 @@ if (isset($_POST['ver_email'])){
 
     $email = $_POST['ver_email'];
 
-    //check email and token
-    $sql = "SELECT USR_id, USR_ver
+    //check emai
+    $sql = "SELECT USR_id
     FROM USR
     WHERE USR_email = '$email'";
 
@@ -27,7 +27,13 @@ if (isset($_POST['ver_email'])){
             
         $row = $result->fetch_assoc();
         
-        $hash2 = $row["USR_hash"];
+        $hash2 = md5(rand(0,1000));
+
+        $sql =  "UPDATE USR
+                SET USR_hash = '$hash2'
+                WHERE USR_email = '$email'";
+
+        $result=mysqli_query($conn,$sql);
 
         $link = "<a href='http://localhost/workflowlab_beta/php/fp/verification.php?email=$email&t=$hash2'>HERE</a>";
         

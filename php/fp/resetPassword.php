@@ -97,7 +97,7 @@ function sendEmail($email, $message){
     
         //$mail->addAddress('3105289568@txt.att.net'); //kevin
         //Set the subject line
-        $mail->Subject = 'Workflow Lab Registration';
+        $mail->Subject = 'Workflow Lab Password Re-set';
         //Read an HTML message body from an external file, convert referenced images to embedded,
         //convert HTML into a basic plain-text alternative body
         //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));

@@ -8,6 +8,7 @@ require_once 'dbConnect.php';
 
 //variable definitions
 $pass = $email = $fail = "";
+$code = '0'; //error in post
 
 $date = date("Y-m-d");
 
@@ -17,70 +18,74 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
         $email = fix_string($_POST["new_email"]);
         $pass = fix_string($_POST["new_pass1"]);
         $pass2 = fix_string($_POST["new_pass2"]);
-        $uname = fix_string($_POST["new_user"]);
-        $cust = fix_string($_POST["new_cust"]);
+        $token = fix_string($_POST["new_token"]);
 
         // Check connection
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
-        
-        $fail .= valCust($cust);
-        $fail .= valUser($uname);
-        $fail  .= valEM($email, $conn);
+
+        //validate inputs
         $fail .= valPass($pass);
         $fail .= valPassComp($pass,$pass2);
-    
-        if ($fail == ""){
 
-            $hash = password_hash($pass, PASSWORD_DEFAULT);
+        //check email and token
+        $sql = "SELECT USR_id, USR_hash
+                FROM USR
+                WHERE USR_email = '$email'";
 
-            $hash2 = md5(rand(0,1000));
+        $result=mysqli_query($conn,$sql);
 
-            $stmt = $conn->prepare("INSERT INTO CUS (CUS_name) VALUES (?)");
-            $stmt->bind_param("s", $cust);
+        //String validation for input
 
-            $stmt->execute();
-
-            $custID = $stmt->insert_id;
-
-            $defaultVer = 0;
-
-            $stmt = $conn->prepare("INSERT INTO USR (USR_email, USR_key, USR_CUS_id, USR_name, USR_ver, USR_joinDate, USR_accessDate, USR_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssisisss", $email, $hash, $custID, $uname, $defaultVer, $date, $date, $hash2);
-
-            $stmt->execute();
-
-            $userID = $stmt->insert_id;
-
-            $_SESSION['userID'] = $userID;
-            $_SESSION['custID'] = $custID;
-
-            $link = "<a href='http://localhost/workflowlab_beta/php/fp/verification.php?email=$email&t=$hash2'>HERE</a>";
-
-            $message = "<html>
-                            <body>
-                            <img src='cid:logo' width='300'>
-                            <br><br>
-                            <h4>Thank you for registering with Workflow Labs.</h4>
-                            <br>
-                            <h3>Click $link to finalize your registration.</h3>
-                            <br>
-                            <h4>Link not working?  Copy and paste this into your browser:<br><h4>
-                            <h4>http://localhost/workflowlab_beta/php/fp/verification.php?email=$email&t=$hash2</h4> 
-                            </body>
-                        </html>";
+        if($result->num_rows == 0){
             
-            $result = sendEmail($email, $message);
-            
-            echo $result;
-        } 
-        
+            $code = '1'; //1 email not found
+
+        } else {
+
+            $row = $result->fetch_assoc();
+
+            $existingVer = $row['USR_hash'];
+
+            if ($existingVer == $token) {
+
+                //verified, update
+                $hash = password_hash($pass, PASSWORD_DEFAULT);
+                $hash2 = md5(rand(0,1000));
+
+                $sql =  "UPDATE USR
+                            SET USR_key = '$hash', USR_hash = '$hash2'
+                            WHERE USR_email = '$email'";
+
+                $result=mysqli_query($conn,$sql);
+                
+                $code = '3'; //all good, updated
+
+                $message = "<html>
+                                <body>
+                                <img src='cid:logo' width='300'>
+                                <br><br>
+                                <h3>Password Change Confirmation.</h3>
+                                <br>
+                                <h4>Your Workflow Labs password was updated $date.</h4> 
+                                <br>
+                                <h4>If you did not authorize this change, contact us immediately.</h4> 
+                                </body>
+                            </html>";
+
+                $emailCheck = sendEmail($email, $message);
+
+            } else {
+
+                $code = '2'; //verification token doesn't match
+
+            }
+        }
     }
-
 }
 
-echo $fail;
+echo $code;
 
 function valPassComp($field1,$field2)
 {
@@ -96,55 +101,11 @@ function valPass($field)
 	else return "";
 }
 
-function valEM($email, $conn)
-{
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return "Please check the email (it looks weird to us).<br>";
-
-      } else {
-
-        $sql = "SELECT USR_id
-        FROM USR
-        WHERE USR_email = '$email'";
-
-        $result=mysqli_query($conn,$sql);
-
-        //String validation for input
-
-        if($result->num_rows == 0){
-            return "";
-        } else {
-            return "Email is already in use.<br>";
-        }
-    }
-
-}
-
-function valUser($field)
-{
-	if ($field == "") {
-        return "A user name is required.<br>";
-    } else if (strlen($field) < 1){
-		return "Please complete all fields.<br>";
-	}
-}
-
-function valCust($field)
-{
-	if ($field == "") {
-        return "A company name is required.<br>";
-    } else if (strlen($field) < 1){
-		return "A company name is required.<br>";
-	}
-}
-
 function fix_string($string)
 {
 	return stripslashes($string);
 }
 
-//php functions
 function sendEmail($email, $message){
     
         require("../../lib/PHPMailer/PHPMailerAutoload.php");
@@ -185,7 +146,7 @@ function sendEmail($email, $message){
     
         //$mail->addAddress('3105289568@txt.att.net'); //kevin
         //Set the subject line
-        $mail->Subject = 'Workflow Lab Registration';
+        $mail->Subject = 'Workflow Lab Password Change Notification';
         //Read an HTML message body from an external file, convert referenced images to embedded,
         //convert HTML into a basic plain-text alternative body
         //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
@@ -196,13 +157,11 @@ function sendEmail($email, $message){
         //$mail->addAttachment('images/phpmailer_mini.png');
         //send the message, check for errors
         if (!$mail->send()) {
-            echo "Oh no.  Something happened.<br>
-                Mailer Error: " . $mail->ErrorInfo;
+            return 0;
         } else {
-            echo "Account created.<br>
-            A verification email has been sent to $email to make sure we've got it right.<br>
-            Click on the included link to start using Workflow Labs.";
+           return 1;
         }
     
     }
+
 ?>

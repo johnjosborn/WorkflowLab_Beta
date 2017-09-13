@@ -109,6 +109,7 @@ echo <<<_FixedHTML
                 $("#registrationRight").hide().fadeIn("slow").html(failMessage);
             }
         }
+
         function goToRegister() {
             $('html, body').animate({
                 scrollTop: $("#registration").offset().top
@@ -256,8 +257,6 @@ echo <<<_FixedHTML
     <script>
         $("#workingDiv").hide();
 
-        var delay=1000, setTimeoutConst;
-
         $("#helpPassword").mouseover(function(){
             $("#registrationRight").hide().fadeIn("slow").html("Password requirements:<br><ul><li>6 character minimum</li><li>that's it!</li></ul>");
         });
@@ -270,6 +269,7 @@ echo <<<_FixedHTML
         $("#helpCompany").mouseover(function(){
             $("#registrationRight").hide().fadeIn().html("This can be your business name, your real name, or a made up name.  It appears on reports and print outs.");
         });
+
     </script>
 </body>
 </html>

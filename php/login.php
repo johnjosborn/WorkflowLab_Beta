@@ -6,7 +6,7 @@ session_start();
 require_once 'fp/dbConnect.php';
 
 //variable definitions
-$submittedPassword = $password = $code = $email = $message = "";
+$submittedPassword = $password = $code = $email = $message = $visible ="";
 
 if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
     
@@ -35,15 +35,25 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
         if(password_verify($submittedPassword, $password)){
 
-                //TODO check to make sure this account has been verified.  If not spit out reverify message.  Send email if req.
-                //USR_ver = 1
-                
-                $_SESSION['userID'] = $row[1];
-                $_SESSION['custID'] = $row[2];
-                $_SESSION['userName'] = $row[3];
-                $_SESSION['userPerm'] = $row[4];
+                $verCode = $row[5];
 
-                header( "Location: workFlowControl.php");
+                //TODO check to make sure this account has been verified.  If not spit out reverify message.  Send email if req.
+                if($verCode == 1){
+
+                        //user account has been verified.                        
+                        $_SESSION['userID'] = $row[1];
+                        $_SESSION['custID'] = $row[2];
+                        $_SESSION['userName'] = $row[3];
+                        $_SESSION['userPerm'] = $row[4];
+                        
+                        header( "Location: workFlowControl.php");
+                } else {
+
+                    $message = "This account has not been verified.<br><br>
+                                Check your email for the verification link or<br><br>
+                                <button onclick='resendVerification()' class='button1'>Resend verification email.</button>";
+
+                }
 
             } else {
 
@@ -213,15 +223,13 @@ echo <<<_FixedHTML
                         <td><input type="password" name='password' required></td>
                     </tr>
                     <tr>
-                        <td></td><td><input type="submit" onclick="logIn()" value='Log In' class='button1'></td>
+                        <td></td><td><input type="submit" value='Log In' class='button1'></td>
                     </tr>
                 </tbody>
             </table>
             </form>
             </div>
-            <div id='loginRight'>
-                $message
-            </div>
+            <div id='loginRight' $visible>$message</div>
         </div>
     </div>
     <div id='workingDiv'>
