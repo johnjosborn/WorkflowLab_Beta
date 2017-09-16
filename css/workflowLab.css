@@ -9,14 +9,6 @@ html, body{
 }
 
 /* FRAMEWORK */
-#info{
-    position: absolute;
-    top: 1em;
-    right: 2em;
-    color: #FFFFFF;
-    font-size: 1.25em;
-    font-family: 'Open Sans Condensed', sans-serif;
-}
 
 #wfTitle{
     height: 3em;
@@ -62,12 +54,52 @@ html, body{
 #content{
     background: linear-gradient( #C5EDFC, #55ACC9);
     width: 100%;
+    height: 100%;
+}
+
+#contentUpdate{
+    padding: 1em;
+    overflow: hidden;
+    height: 95%;
 }
 
 /* INFO SECTION */
+#info{
+    position: absolute;
+    top: .5em;
+    right: .5em;
+}
+
+#userIcon{
+    text-align: right;
+}
+
+#userMenu{
+    color: #000;
+    font-size: 1.5em;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
 .img1{
     width: 60%;
     margin: .75em auto;
+}
+
+.point{
+    cursor: pointer;
+}
+
+.listItem{
+    background: rgba(0, 0, 0, 0.53);
+    color: white;
+    width: 100%;
+    padding: .2em .5em;
+    margin: .1em;
+    cursor: pointer;
+}
+
+.listItem:hover{
+    background: rgba(1, 39, 83, 0.53);
 }
 
 /* ACCORDIAN */
@@ -78,7 +110,7 @@ html, body{
 }
 
 .ui-accordion-header-active{
-    background: #003366;
+    background: #00478D;
     border-top: 1px solid #aaa;
     border-bottom: 1px solid #aaa;
     border-left: none;
@@ -103,6 +135,12 @@ html, body{
     border-left: none;
     border-right: none;
     text-align: center;
+}
+
+#accordianContentNull{
+    margin: 0;
+    padding: 0;
+    display: none;
 }
 
 /* RADIO BUTTONS */

@@ -46,7 +46,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
                         $_SESSION['userName'] = $row[3];
                         $_SESSION['userPerm'] = $row[4];
                         
-                        header( "Location: workFlowControl.php");
+                        header( "Location: workflowLab.php");
                 } else {
 
                     $message = "This account has not been verified.<br><br>

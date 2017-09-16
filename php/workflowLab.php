@@ -66,6 +66,11 @@ $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
 $controls = "
             <div id='controlAccordian'>
                 <div class='accd_header'>
+                    Home
+                </div>
+                <div id='accordianContentNull'>
+                </div>
+                <div class='accd_header'>
                     Workflows
                 </div>
                 <div class='accordianContent'>
@@ -113,21 +118,25 @@ echo <<<_FixedHTML
     
     <script>
 
-
-
     </script>
 </head>
 <body> 
     <div id='container'>
     <div id='controls'>
-        <div id='controlHide'><img src='../media/hide.png'></div>
+        <div id='controlHide' class='point'><img src='../media/hide.png'></div>
         <div id='wfTitle'><img src='../media/logo6.png' class='img1'></div>
         $controls
     </div>
     <div id="content">
-        <div id='controlShow'><img src='../media/show.png'></div>
+        <div id='controlShow'  class='point'><img src='../media/show.png'></div>
         <div id='info'>
-            John  
+            <div id='userIcon' class='point'>
+                <img src='../media/user.png'> 
+            </div>
+            <div id='userMenu'>
+                <div class='listItem'>Item number 1</div>
+                <div class='listItem'>Item2</div>
+            </div>
         </div>   
         <div id='contentUpdate'>
             Content to be updated
@@ -139,6 +148,12 @@ echo <<<_FixedHTML
     <script>
 
         $("#controlShow").hide();
+
+        $("#userMenu").hide();
+
+        $("#userIcon").click(function(){
+            $("#userMenu").fadeToggle();           
+        });
     
         $("#controlHide").click(function(){
             $("#controls").toggle("slow", function(){
