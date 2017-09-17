@@ -13,7 +13,7 @@ require_once 'fp/dbConnect.php';
 //require_once 'fp/logInValidation.php'; //$userID, $custID
 
 //get list of items for select box
-$itemSelect = "<select class='inputField' id='wfByItem'><option disabled selected>Select Item</option>";
+$itemSelect = "<div class='inputControl'><select class='inputField' id='wfByItem'><option disabled selected>Select Item</option>";
 
 $sql = "SELECT DISTINCT WKF_item
         FROM WKF
@@ -35,32 +35,24 @@ if($result){
     }
 }
 
-$itemSelect .= "</select>";
+$itemSelect .= "</select></div>";
 
 $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
-            <label for='radio-1' class='selectRadio'>Active</label>
-            <input type='radio' name='radio-1' id='radio-1' onclick='getWorkflowList('Active')'>
-            <br>
-            <label for='radio-2' class='selectRadio'>Completed</label>
-            <input type='radio' name='radio-1' id='radio-2' onclick='getWorkflowList('Complete')'>
-            <br>
-            <label for='radio-7' class='selectRadio'>Pending</label>
-            <input type='radio' name='radio-1' id='radio-7' onclick='getWorkflowList('Pending')'>
-            <br>
-            <label for='radio-3' class='selectRadio'>All</label>
-            <input type='radio' name='radio-1' id='radio-3' onclick='getWorkflowList('%')'>
-            <br>
+            <div id='radio-1' onclick='getWorkflowList('Active')' class='selectRadio'>Active</div>
+            <div id='radio-2' onclick='getWorkflowList('Complete')' class='selectRadio'>Completed</div>
+            <div id='radio-7' onclick='getWorkflowList('Pending')' class='selectRadio'>Pending</div>
+            <div id='radio-3' onclick='getWorkflowList('%')' class='selectRadio'>All</div>
             <hr>
-            <label for='radio-4' class='selectRadio'>Templates</label>
-            <input type='radio' name='radio-1' id='radio-4' onclick='getWorkflowList('Template')'>
+            <div id='radio-4' onclick='getWorkflowList('Template')' class='selectRadio'>Templates</div>
             <hr>
-            <label for='radio-5' class='selectRadio'>View by Item</label>
-            <input type='radio' name='radio-1' id='radio-5' onclick='itemClick()'>
+            <div id='radio-5' onclick='itemClick()' class='selectRadio'>View by Item</div>
                 $itemSelect
             <hr>
-            <label for='radio-6' class='selectRadio'>Text Search</label>
-            <input type='radio' name='radio-1' id='radio-6'>
-            <input type='text' id='stringSearchTerm' class='inputField2'><button onclick='getWorkflowListString()' class='button1'>Search</button>";
+            <div id='radio-6' class='selectRadio'>Text Search</div>
+            <div class='inputControl'>
+                <input type='text' id='stringSearchTerm' class='inputField2'>
+                <button onclick='getWorkflowListString()' class='button1'>Search</button>
+            </div>";
 
 
 $controls = "
@@ -70,7 +62,7 @@ $controls = "
                 </div>
                 <div id='accordianContentNull'>
                 </div>
-                <div class='accd_header'>
+                <div class='accd_header accd_header_selected'>
                     Workflows
                 </div>
                 <div class='accordianContent'>
@@ -80,25 +72,23 @@ $controls = "
                     Items
                 </div>
                 <div class='accordianContent'>
-                    <div>Item1</div>
-                    <div>Item2</div>
                 </div>
                 <div class='accd_header'>
                     Steps
                 </div>
                 <div class='accordianContent'>
-                    <div>Step1</div>
-                    <div>Step2</div>
                 </div>
                 <div class='accd_header'>
                     Users
                 </div>
                 <div class='accordianContent'>
-                    <div>User1</div>
-                    <div>User2</div>
                 </div>
             </div>";
 
+            // <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            // <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+            
 echo <<<_FixedHTML
 
 <!DOCTYPE html>
@@ -110,9 +100,10 @@ echo <<<_FixedHTML
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/workflowLab.css">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css">
     
     <title>Work Flow Lab</title>
     
@@ -139,7 +130,7 @@ echo <<<_FixedHTML
             </div>
         </div>   
         <div id='contentUpdate'>
-            Content to be updated
+            
         </div>
     </div>
         
@@ -148,6 +139,16 @@ echo <<<_FixedHTML
     <script>
 
         $("#controlShow").hide();
+
+        $(".accd_header").click(function(){
+            $(".accd_header").css("background", "linear-gradient( #555, #444)");  
+            $(this).css("background", "#2C5C83");  
+        });
+
+        $(".selectRadio").click(function(){
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $(this).css("background", "#7A0909");  
+        });
 
         $("#userMenu").hide();
 
@@ -168,28 +169,14 @@ echo <<<_FixedHTML
                 $("#controlHide").fadeIn();
             });
         });
-
-        $( "#controlAccordian" ).accordion({
-                active: 0,
-                collapsible: true,
-                header: ".accd_header",
-                heightStyle: "content",
-                animate: 500
-        });
-
-        $( "input[type='radio']" ).checkboxradio({
-            icon: false
-        });
-
-        $("#radio-1").attr("checked","checked").change();
         
         $('#wfByItem').on('change', function() {
             //getWorkflowListItem(this.value);
-            $("#radio-5").attr("checked","checked").change();
+
         })
 
         $('#stringSearchTerm').on('focus', function() {
-            $("#radio-6").attr("checked","checked").change();
+ 
         })
 
     </script>
