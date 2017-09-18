@@ -12,12 +12,13 @@ $custID = '1';
 require_once 'fp/dbConnect.php';
 //require_once 'fp/logInValidation.php'; //$userID, $custID
 
-//get list of items for select box
-$itemSelect = "<div class='inputControl'><select class='inputField' id='wfByItem'><option disabled selected>Select Item</option>";
+//get list of items for select boxes
+$itemSelect = "<div class='inputControl'><select class='inputField controlSelect' id='wfByItem'><option disabled selected>Select Item</option>";
+$itemSelect2 = "<div class='inputControl'><select class='inputField controlSelect' id='itemByItem'><option disabled selected>Select Item</option>";
 
-$sql = "SELECT DISTINCT WKF_item
-        FROM WKF
-        WHERE WKF_CUS_id = '$custID'";
+$sql = "SELECT DISTINCT ITM_id, ITM_num
+        FROM ITM
+        WHERE ITM_CUS_id = '$custID'";
 
 $result = mysqli_query($conn,$sql);
 
@@ -27,61 +28,109 @@ if($result){
 
         while($row = $result->fetch_assoc()){
 
-            $item = $row['WKF_item'];
+            $item = $row['ITM_num'];
+            $itemID = $row['ITM_id'];
 
-            $itemSelect .= "<option value ='$item'>$item</option>";
+            $itemSelect .= "<option value ='$itemID'>$item</option>";
+            $itemSelect2 .= "<option value ='$itemID'>$item</option>";
         }
 
     }
 }
 
 $itemSelect .= "</select></div>";
+$itemSelect2 .= "</select></div>";
+
+//get list of items for select box
+$groupSelect = "<div class='inputControl'><select class='inputField controlSelect' id='wfByGroup'><option disabled selected>Select Group</option>";
+
+$sql = "SELECT WKO_name
+        FROM WKO
+        WHERE WKO_CUS_id = '$custID' & WKO_status = 'Active'
+        ORDER BY WKO_name";
+
+$result = mysqli_query($conn,$sql);
+
+if($result){
+    
+    if($result->num_rows != 0){
+
+        while($row = $result->fetch_assoc()){
+
+            $item = $row['WKO_name'];
+
+            $groupSelect .= "<option value ='$item'>$item</option>";
+        }
+
+    }
+}
+
+$groupSelect .= "</select></div>";
 
 $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
-            <div id='radio-1' onclick='getWorkflowList('Active')' class='selectRadio'>Active</div>
-            <div id='radio-2' onclick='getWorkflowList('Complete')' class='selectRadio'>Completed</div>
-            <div id='radio-7' onclick='getWorkflowList('Pending')' class='selectRadio'>Pending</div>
-            <div id='radio-3' onclick='getWorkflowList('%')' class='selectRadio'>All</div>
-            <hr>
-            <div id='radio-4' onclick='getWorkflowList('Template')' class='selectRadio'>Templates</div>
-            <hr>
-            <div id='radio-5' onclick='itemClick()' class='selectRadio'>View by Item</div>
-                $itemSelect
-            <hr>
-            <div id='radio-6' class='selectRadio'>Text Search</div>
-            <div class='inputControl'>
-                <input type='text' id='stringSearchTerm' class='inputField2'>
-                <button onclick='getWorkflowListString()' class='button1'>Search</button>
-            </div>";
+    <div id='radio-wf-active' onclick='getWorkflowList('Active')' class='selectRadio'>Active</div>
+    <div id='radio-wf-comp' onclick='getWorkflowList('Complete')' class='selectRadio'>Completed</div>
+    <div id='radio-wf-pend' onclick='getWorkflowList('Pending')' class='selectRadio'>Pending</div>
+    <div id='radio-wf-all' onclick='getWorkflowList('%')' class='selectRadio'>All</div>
+    <hr>
+    <div id='radio-wf-temp' onclick='getWorkflowList('Template')' class='selectRadio'>Templates</div>
+    <hr>
+    <div id='radio-wf-item' onclick='itemClick()' class='selectRadio'>Item Details</div>
+        $itemSelect
+    <div id='radio-wf-group' onclick='groupClick()' class='selectRadio'>View by Group</div>
+        $groupSelect
+    <hr>
+    <div id='radio-wf-text' class='selectRadio'>Text Search</div>
+    <div class='inputControl'>
+        <input type='text' id='stringSearchWF' class='inputField2'>
+        <button onclick='getWorkflowListString()' class='button1'>Search</button>
+    </div>";
+
+$ctrlItem = "  
+    <div class='listLabel'>ITEMS BY STATUS</div>
+    <div id='radio-itm-active' onclick='getWorkflowList('Active')' class='selectRadio'>Active</div>
+    <div id='radio-itm-inactive' onclick='getWorkflowList('Inactive')' class='selectRadio'>Inactive</div>
+    <div id='radio-itm-all' onclick='getWorkflowList('Inactive')' class='selectRadio'>All Items</div>
+    <hr>
+    <div id='radio-itm-detail' onclick='itemClick()' class='selectRadio'>Item Details</div>
+        $itemSelect2
+    <hr>
+    <div id='radio-itm-text' class='selectRadio'>Text Search</div>
+    <div class='inputControl'>
+        <input type='text' id='stringSearchItem' class='inputField2'>
+        <button onclick='getItemListString()' class='button1'>Search</button>
+    </div>
+    <div id='radio-itm-new' class='selectRadio' onclick='addNewItem()'>New Item</div> ";
 
 
 $controls = "
             <div id='controlAccordian'>
-                <div class='accd_header'>
+                <div class='accd_header accd_header_selected' onclick='h0()'>
                     Home
                 </div>
-                <div id='accordianContentNull'>
-                </div>
-                <div class='accd_header accd_header_selected'>
+                <div class='accd_header' onclick='h1()'>
                     Workflows
                 </div>
-                <div class='accordianContent'>
+                <div class='accd_content' id='c1' hidden>
                     $ctrlWf
                 </div>
-                <div class='accd_header'>
+                <div class='accd_header'  onclick='h2()'>
                     Items
                 </div>
-                <div class='accordianContent'>
+                <div class='accd_content' id='c2' hidden>
+                    $ctrlItem
                 </div>
-                <div class='accd_header'>
+                <div class='accd_header'  onclick='h3()'>
                     Steps
                 </div>
-                <div class='accordianContent'>
+                <div class='accd_content' id='c3' hidden>
+                    Content 3
                 </div>
-                <div class='accd_header'>
+                <div class='accd_header'  onclick='h4()'>
                     Users
                 </div>
-                <div class='accordianContent'>
+                <div class='accd_content' id='c4' hidden>
+                    Content 4
                 </div>
             </div>";
 
@@ -129,14 +178,40 @@ echo <<<_FixedHTML
                 <div class='listItem'>Item2</div>
             </div>
         </div>   
-        <div id='contentUpdate'>
-            
+        <div id='contentContainer'>
+            <div id='contentUpdate'>
+                
+            </div>
         </div>
     </div>
         
         </div>
     </div>
     <script>
+
+        function h0(){  
+            $("#c1, #c2, #c3, #c4").slideUp();
+        }
+
+        function h1(){  
+            $("#c0, #c2, #c3, #c4").slideUp();
+            $("#c1").slideToggle("slow");
+        }
+
+        function h2(){  
+            $("#c0, #c1, #c3, #c4").slideUp();
+            $("#c2").slideToggle("slow");
+        }
+
+        function h3(){  
+            $("#c0, #c1, #c2, #c4").slideUp();
+            $("#c3").slideToggle("slow");
+        }   
+
+        function h4(){  
+            $("#c0, #c1, #c2, #c3").slideUp();
+            $("#c4").slideToggle("slow");
+        }
 
         $("#controlShow").hide();
 
@@ -147,7 +222,7 @@ echo <<<_FixedHTML
 
         $(".selectRadio").click(function(){
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $(this).css("background", "#7A0909");  
+            $(this).css("background", "#3E8553");  
         });
 
         $("#userMenu").hide();
@@ -172,13 +247,89 @@ echo <<<_FixedHTML
         
         $('#wfByItem').on('change', function() {
             //getWorkflowListItem(this.value);
-
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-wf-item").css("background", "#3E8553");
         })
 
-        $('#stringSearchTerm').on('focus', function() {
- 
+        $('#wfByGroup').on('change', function() {
+            //getWorkflowListItem(this.value);
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-wf-group").css("background", "#3E8553");
         })
 
+        $('#stringSearchWF').on('focus', function() {
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-wf-text").css("background", "#3E8553");
+        })
+
+        function addNewItem() {
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/item_new.php',   
+                dataType: 'html',
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
+
+        $('#itemByItem').on('change', function() {
+            //getWorkflowListItem(this.value);
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-itm-detail").css("background", "#3E8553");
+        })
+
+        $('#stringSearchItem').on('focus', function() {
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-itm-text").css("background", "#3E8553");
+        })
+
+        function saveNewItem(){
+            var itemNum = $("#item_num").val();
+            var itemDesc = $("#item_desc").val();
+            var itemStatus = $("#item_sta").val();
+            var itemWf = $("#item_wf").val();
+
+            itemNum = itemNum.trim();
+
+            if (itemNum){
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'fp/item_save.php',   
+                    dataType: 'html',
+                    data: {
+                        item_num: itemNum,
+                        item_desc: itemDesc,
+                        item_sta: itemStatus,
+                        item_wf: itemWf
+                    },
+                    success: function (html) {
+                        $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                    }
+                });
+
+            } else {
+
+                alert("item number is required");
+            }
+
+
+        }
+
+        function clearNewItem(){
+            $("#item_num").val("");
+            $("#item_desc").val("");
+            $("#item_sta").val("Active");
+            $("#item_wf").val("0");
+        }
     </script>
 </body>
 </html>

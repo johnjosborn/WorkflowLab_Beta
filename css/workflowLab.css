@@ -38,9 +38,10 @@ body {
     width: 25%;
     background: none;
     float: left;
-    padding: 0;
+    padding: 0 1em 0 0;
     position: relative;
     border: none;
+    overflow-y: auto;
 }
 
 #controlShow{
@@ -57,17 +58,77 @@ body {
     z-index: 1;
 }
 
+/* CONTENT SECTION */
+
 #content{
     background: none;
-    /* linear-gradient( #FFFFFF, #C2C2C2); */
     width: 100%;
     height: 100%;
 }
 
-#contentUpdate{
-    padding: 1em;
+#contentContainer{
+    border: none;
     overflow: hidden;
+    padding: 3em;
     height: 95%;
+}
+
+#contentUpdate{
+    border: none;
+    overflow: auto;
+}
+
+.contentTitle{
+    background: #2C5C83;
+    margin: 0 auto;
+    display: block;
+    padding: .2em 3em;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid #666;
+    border-bottom: none;
+    font-size: 1.5em;
+    text-align: center;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: white;
+}
+
+.contentHolder{
+    background: linear-gradient( #bbb, #eee);
+    border-radius: 0 0 10px 10px;
+    border: 1px solid #666;
+    padding: 1em 2em;
+}
+
+.inputTable{
+    border-collapse: separate;
+    border-spacing: 1em .5em;
+    font-size: 1.25em;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.inputTable td{
+    padding: 0;
+    width: 20em;
+}
+
+.textTableInput{
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: .1em .5em;;
+    font-size: 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.buttonDiv{
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #333;
+    background: linear-gradient( #3cb0fd, #3498db);
+    border-radius: 3px;
+    padding: .1em .5em;;
+    font-size: 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
 }
 
 /* INFO SECTION */
@@ -132,13 +193,13 @@ body {
 }
 
 .temp{
-    color: #7A0909;
+    color: #3E8553;
 }
-.accordianContent{
+.accd_content{
     background: none;
 }
 
-#accordianContentNull{
+#accd_contentNull{
     margin: 0;
     padding: 0;
     display: none;
@@ -171,7 +232,7 @@ body {
     padding: .2em 0 .2em 1em;
 }
 
-#stringSearchTerm{
+.inputField2{
     font-size: 1em;
     display: inline-block;
     height: 90%;
@@ -182,7 +243,7 @@ body {
     font-family: 'Open Sans Condensed', sans-serif;
 }
 
-#wfByItem{
+.controlSelect{
     font-size: 1em;
     display: inline-block;
     height: 100%;
@@ -191,7 +252,6 @@ body {
     background: #FFFFFF;
     font-family: 'Open Sans Condensed', sans-serif;
 }
-
 
 button.button1{
     margin: .2em;
@@ -208,6 +268,7 @@ button.button1{
     padding: .25em .5em;
     text-decoration: none;
     font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1em;
 }
 
 .button1:hover {
