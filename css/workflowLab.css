@@ -131,6 +131,65 @@ body {
     font-family: 'Open Sans Condensed', sans-serif;
 }
 
+.listTable{
+    margin: 1em auto;
+    background: white;
+    width: 100%;
+    cursor: pointer;
+    padding: .75em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1.2em;
+}
+
+.listTable td{
+    padding: .2em .5em;
+}
+
+.listTable td.compHolder{
+    padding: 0;
+}
+
+.listTable tbody tr{
+    border-bottom: 2px solid gray;
+}
+
+.listTable tbody tr:nth-child(even){
+    background-color: #BFD6FF;
+}
+
+.listTable tbody tr:nth-child(odd){
+    background-color: #eee;
+}
+
+.listTable thead tr:nth-child(even){
+    background-color: #333;
+    color: #fff;
+}
+
+.listTable tbody tr:hover{
+    background-color: #F8B951;
+    font-weight: bold;
+}
+
+/* TABLE SORTABLE */
+
+table.tablesorter thead tr .header {
+	background-image: url(../media/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../media/asc.gif);
+	background-color: #4B8DFE;
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../media/desc.gif);
+	background-color: #4B8DFE;
+}
+
+
 /* INFO SECTION */
 #info{
     position: absolute;

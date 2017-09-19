@@ -88,9 +88,9 @@ $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
 
 $ctrlItem = "  
     <div class='listLabel'>ITEMS BY STATUS</div>
-    <div id='radio-itm-active' onclick='getWorkflowList('Active')' class='selectRadio'>Active</div>
-    <div id='radio-itm-inactive' onclick='getWorkflowList('Inactive')' class='selectRadio'>Inactive</div>
-    <div id='radio-itm-all' onclick='getWorkflowList('Inactive')' class='selectRadio'>All Items</div>
+    <div id='radio-itm-active' onclick='getItemList(\"Active\")' class='selectRadio'>Active</div>
+    <div id='radio-itm-inactive' onclick='getItemList(\"Inactive\")' class='selectRadio'>Inactive</div>
+    <div id='radio-itm-all' onclick='getItemList(\"%\")' class='selectRadio'>All Items</div>
     <hr>
     <div id='radio-itm-detail' onclick='itemClick()' class='selectRadio'>Item Details</div>
         $itemSelect2
@@ -148,11 +148,13 @@ echo <<<_FixedHTML
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="../css/workflowLab.css">
 
     <script src="../js/jquery.js"></script>
+    <script src="../js/jquery.tablesorter.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css">
+    
     
     <title>Work Flow Lab</title>
     
@@ -329,6 +331,25 @@ echo <<<_FixedHTML
             $("#item_desc").val("");
             $("#item_sta").val("Active");
             $("#item_wf").val("0");
+        }
+
+        function getItemList(searchType){
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/item_getList.php',   
+                dataType: 'html',
+                data: {
+                    search_type : searchType
+                },
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    $("#itemList").tablesorter();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
         }
     </script>
 </body>
