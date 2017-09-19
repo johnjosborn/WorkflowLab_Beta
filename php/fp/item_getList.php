@@ -21,21 +21,34 @@ if (isset($_POST['search_type'])){
         case "%":
 
             $whereClause = "";
-            $status = "All";
+            $status = "All Items";
+        
+            break;
+
+        case "String":
+        
+            $searchTerm = $_POST['search_term'];
+
+            $status = "Items Containing Search Term: \"$searchTerm\"";
+            
+            $searchTerm = "%" . $searchTerm . "%";
+
+            $whereClause = "AND (ITM_num Like '$searchTerm' OR ITM_desc Like '$searchTerm')";
+
         
             break;
 
         default:
         
             $whereClause = "AND ITM_status Like '$searchType'";
-            $status = $searchType;
+            $status = $searchType . " Items";
 
             break;
 
     }
 
     $output = "<div class='contentTitle'>
-                Items List :  $status Items
+                Items List :  $status
             </div>
             <div class='contentHolder'>";
 
@@ -56,7 +69,7 @@ if (isset($_POST['search_type'])){
                             <th>Item</th>
                             <th>Description</th>
                             <th>Status</th>
-                            <th>Defaukt Workflow</th>
+                            <th>Default Workflow</th>
                         </tr>
                         </thead>
                         <tbody>";
@@ -74,7 +87,7 @@ if (isset($_POST['search_type'])){
                 $itemWf = 'none';
             }
 
-            $output .= "<tr onclick='itemDetails(this)' id='$itemID'>
+            $output .= "<tr onclick='getItemDetails($itemID)'>
                     <td>$itemNum</td>
                     <td>$itemDesc</td>
                     <td>$itemSta</td>

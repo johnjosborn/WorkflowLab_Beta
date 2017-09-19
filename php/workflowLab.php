@@ -18,7 +18,8 @@ $itemSelect2 = "<div class='inputControl'><select class='inputField controlSelec
 
 $sql = "SELECT DISTINCT ITM_id, ITM_num
         FROM ITM
-        WHERE ITM_CUS_id = '$custID'";
+        WHERE ITM_CUS_id = '$custID'
+        ORDER BY ITM_num";
 
 $result = mysqli_query($conn,$sql);
 
@@ -351,6 +352,101 @@ echo <<<_FixedHTML
                 }
             });
         }
+
+        function getItemListString(){
+
+            
+            var textString = $("#stringSearchItem").val();
+
+            alert(textString);
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/item_getList.php',   
+                dataType: 'html',
+                data: {
+                    search_type : 'String',
+                    search_term : textString
+                },
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    $("#itemList").tablesorter();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
+
+        function getItemDetails(itemID){
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/item_details.php',   
+                dataType: 'html',
+                data: {
+                    item_id : itemID
+                },
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
+
+        function editChangeItem(){
+            $("#btnEditItemChg").hide();
+            $("#btnSaveItemChg").fadeIn();
+            $("#btnUndoItemChg").fadeIn();
+            $('.itemEdit').prop('readonly', false);
+            $('.itemEditSelect').prop('disabled', false);
+        }
+
+        function saveChangeItem(itemID){
+            var itemNum = $("#item_num").val();
+            var itemDesc = $("#item_desc").val();
+            var itemStatus = $("#item_sta").val();
+            var itemWf = $("#item_wf").val();
+
+            itemNum = itemNum.trim();
+
+            if (itemNum){
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'fp/item_change.php',   
+                    dataType: 'html',
+                    data: {
+                        item_id: itemID,
+                        item_num: itemNum,
+                        item_desc: itemDesc,
+                        item_sta: itemStatus,
+                        item_wf: itemWf
+                    },
+                    success: function (html) {
+                        getItemDetails(itemID)
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                    }
+                });
+
+            } else {
+
+                alert("item number is required");
+            }
+
+
+        }
+
+        $('#itemByItem').on('change', function() {
+            getItemDetails(this.value);
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-itm-detail").css("background", "#3E8553");
+        })
+
     </script>
 </body>
 </html>
