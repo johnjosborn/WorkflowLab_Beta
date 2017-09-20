@@ -9,9 +9,6 @@ require_once 'dbConnect.php';
 //DEBUG
 $custID = '1';
 
-
-$conn = mysqli_connect($db_server, $db_username, $db_password, $db_database);
-
 if (isset($_POST['search_type'])){
 
     $searchType = $_POST['search_type'];
