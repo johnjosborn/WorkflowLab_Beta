@@ -36,8 +36,7 @@ if (isset($_POST['wf_id'])){
 
     if($result){
 
-        $steps = "<div id='accordionHolder'class='rightDiv'>
-                    <div class='containHeader'>Workflow Steps</div>
+        $steps = "<div id='accordionHolder' class=''>
                     <div id='accordianScroll' class='container scrollable'>
                     <div id='stepAccordian' class=''>";
 
@@ -65,7 +64,6 @@ if (isset($_POST['wf_id'])){
                     case "Complete":
                         $class = "stepComplete";
                         $compSteps++;
-
                     break;
                 }
 
@@ -142,7 +140,7 @@ if (isset($_POST['wf_id'])){
 
 
 
-$output = "<div class='contentTitle'>
+$output = "<div class='contentTitle' id='activeTitle'>
                 <div>Workflow#&nbsp$wfNum&nbsp&nbspItem:&nbsp$wfItem</div>
             </div>
             </div>

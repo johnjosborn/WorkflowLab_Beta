@@ -50,15 +50,18 @@ if (isset($_POST['wf_id'])){
                 $workFlowHeader = "
                 <div id='workflowHeader'>
                     <div class='labelDiv'>Item</div>
-                    <div class='dataDiv'>$wfItem</div>
+                    <div class='dataDiv minHeight'>$wfItem</div>
                     <div class='labelDiv'>Description</div>
-                    <div class='dataDiv'>$wfDesc</div>
+                    <div class='dataDiv minHeight'>$wfDesc</div>
                     <div class='labelDiv'>Group</div>
-                    <div class='dataDiv'>$wfGroup</div>
+                    <div class='dataDiv minHeight'>$wfGroup</div>
                     <div class='labelDiv'>Referece</div>
-                    <div class='dataDiv'>$wfRef</div>
+                    <div class='dataDiv minHeight'>$wfRef</div>
                     <div class='labelDiv'>Notes</div>
-                    <div class='dataDiv'>$wfRef</div>
+                    <div class='dataDiv minHeight'>$wfRef</div>
+                    <input type='button' class='button1' onclick='resetWf($wfID)' value='Reset'>
+                    <input type='button' class='button1' onclick='editWf($wfID)' value='Modify'>
+                    <input type='hidden' id='wfIDHolder' value='$wfID'>
                 </div>";
             }
         }

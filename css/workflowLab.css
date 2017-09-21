@@ -337,7 +337,7 @@ table.tablesorter thead tr .headerSortDown {
     font-family: 'Open Sans Condensed', sans-serif;
 }
 
-button.button1{
+.button1{
     margin: .2em;
     background: #3498db;
     background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
@@ -451,6 +451,17 @@ button.button1{
 	background: #F6FF93;
 }
 
+.availOp{
+    border-radius: 3px;
+    border: 1px solid #5C5C5C;
+    background-color: #FFC37D;
+    font-size: 1em;
+    color: black;
+    padding: .2em .5em;
+    margin: .2em 0;
+    text-align: left;
+}
+
 /* WORKFLOW HEADER */
 
 .wfHeader{
@@ -473,27 +484,46 @@ button.button1{
 }
 
 .labelDiv{
-    width: 40%;
-    margin: .2em auto 0 0;
-    padding: .2em 0 .2em 1em;
+    width: 50%;
+    margin: .2em 0 0 auto;
+    padding: .1em .2em .1em 1em;
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 1em;
+    font-weight: bold;
+    text-align: center;
     border-radius: 3px 3px 0 0;
     background: linear-gradient( #333, #444);
-    border: none;
+    background: #21415A;
     color: #fff;
 }
 
 .dataDiv{
-    font-size: 1.1em;
-    padding: .1em .5em;
-    background-color: #BFD6FF;
-    margin: 0 0 .2em 0;
-    border: 1px solid #999;
+    width: 80%;
+    margin: 0 0 0 auto;
+    padding: .2em .2em .2em 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1.15em;
+    border-radius: 2px 0 2px 2px;
+    background: none;
+    border: 1px solid #666;
+    color: #000;
+}
+
+.titleDiv{
+    width: 50%;
+    margin: .5em auto;
+    padding: .1em .2em .1em 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    background: linear-gradient( #B34700, #742C00);
+    color: #fff;
 }
 
 #workflowHeader{
-    padding: 0 1em 0 1em;
+    padding: 0 .5em 0 0;
 }
 
 
@@ -540,4 +570,27 @@ button.button1{
 
 .inlineB{
     display: inline-block;
+}
+
+.minHeight{
+    min-height: 1.5em;
+}
+
+.leftDiv{
+    float: left;
+    width: 40%;
+    height: 100%;
+}
+
+.rightDiv{
+    float: right;
+    width: 55%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.scrollable{
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 85%;
 }

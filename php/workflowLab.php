@@ -89,21 +89,23 @@ echo <<<_FixedHTML
         }
 
         function h0(){  
-            $("#c1, #c2, #c3, #c4").slideUp();
+            $("#c1, #c2, #c3, #c4, #activeControl").slideUp();
         }
 
         function h1(){  
-            $("#c0, #c2, #c3, #c4, #activeContent").slideUp();
+            $("#c0, #c2, #c3, #c4, #activeControl").slideUp();
             $("#c1").slideToggle("slow");
+            $("#radio-wf-active").css("background", "#3E8553");
+            getWorkflowList("Active");
         }
 
         function h3(){  
-            $("#c0, #c1, #c2, #c4, #activeContent").slideUp();
+            $("#c0, #c1, #c2, #c4, #activeControl").slideUp();
             $("#c3").slideToggle("slow");
         }   
 
         function h4(){  
-            $("#c0, #c1, #c2, #c3, #activeContent").slideUp();
+            $("#c0, #c1, #c2, #c3, #activeControl").slideUp();
             $("#c4").slideToggle("slow");
         }
 
@@ -184,6 +186,7 @@ echo <<<_FixedHTML
         function openWorkflow(wfl){
 
             var wfID = wfl.id;
+
             $.ajax({
                 type: 'POST',
                 url: 'fp/wf_getWorkflow.php',   
@@ -242,7 +245,6 @@ echo <<<_FixedHTML
                             });
 
                             getWFHeader(wfID);
-                        
                         }
                     });
                 },
@@ -271,6 +273,202 @@ echo <<<_FixedHTML
                     $("#activeControl").hide().fadeIn("slow").html("error loading new item form.");
                 }
             });
+        }
+
+        function editWf(wfID){
+
+            getModHeader(wfID);
+
+        }
+
+        function getModHeader(wfID){
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_mod_header.php',   
+                dataType: 'html',
+                data: {
+                   wfl_id : wfID
+                },
+                success: function (html) {
+                   $("#activeContent").hide().fadeIn("slow").html(html);
+                   getModAvailOps(wfID);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading workflow.");
+                }
+            });
+        }
+
+        function getModAvailOps(wfID){
+           
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_mod_ops.php',   
+                dataType: 'html',
+                data: {
+                   wfl_id : wfID
+                },
+                success: function (html) {
+                   $("#contentUpdate").hide().fadeIn("slow").html(html);
+                   opsSortable();
+                   getModSteps(wfID);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
+                }
+            });
+        }
+
+        function getModSteps(wfID){
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_mod_steps.php',   
+                dataType: 'html',
+                data: {
+                   wfl_id : wfID
+                },
+                success: function (html) {
+                   $("#stepAccordian").hide().fadeIn("slow").html(html);
+                   modAccordian();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
+                }
+            });
+        }
+
+        function modAccordian(){
+
+            $( "#stepAccordian" ).accordion({
+                active: false,
+                collapsible: true,
+                header: ".stepHeader",
+                heightStyle: "content",
+                animate: 500
+                })
+            .sortable({
+                items: '.s_panel',
+                forceHelperSize: true,
+                forcePlaceHolderSize: false,
+                dropOnEmpty: true,
+                tolerance: "intersect",
+                placeholder: "sortable-placeholder",
+                over: function (event, ui) {
+                    removeIntent = false;
+                    $(ui.item).find(".stepHeader").css("border-bottom", "none");
+                },
+                out: function (event, ui) {
+                    removeIntent = true;    
+                    $(ui.item).find(".stepHeader").css("border-bottom", "6px solid red");                              
+                },
+                beforeStop: function (event, ui) {
+                    if(removeIntent == true){
+                        ui.item.remove();   
+                    }
+                },
+                stop: function (event, ui) {
+                    $(ui.item).find(".stepHeader").css("border-bottom", "none");
+                    $('#wfEditButtons').show();
+                },
+                change: function( event, ui ) {
+                    $('#wfEditButtons').show();
+                }
+            });
+
+            //$('#wfEditButtons').hide();
+            //$('.stepButtons').hide();
+
+            $('#stepAccordian .stepHeader').bind('click',function(){
+                var self = this;
+                setTimeout(function() {
+                    theOffset = $(self).position();
+                    theNextOffset = $('#stepAccordian').position();
+                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1000);
+                }, 510); // ensure the collapse animation is done
+            });
+
+            $( function() {
+                $( ".datePicker" ).datepicker({
+                    dateFormat: "yy-mm-dd"
+                });
+              } );
+
+        }
+
+        function opsSortable(){
+            $( "#sourceOps" ).sortable({
+                connectWith: ".connectedSortable",
+                forceHelperSize: true,
+                forcePlaceHolderSize: true,
+                placeholder: "sortable-placeholder",
+                scroll : false,
+                dropOnEmpty: true,
+                tolerance: "intersect",
+                remove: function(e,tr) {
+                    copyHelper= tr.item.clone().insertAfter(tr.item);
+                    $(this).sortable('cancel');
+                    return tr.clone();
+                }     
+            }).disableSelection();
+
+            $("#sourceOps").on("click", ".s_panel", function(){
+                $( this ).clone().appendTo( "#stepAccordian" );
+                $('#wfEditButtons').show();
+            });
+        }
+
+        function resetWf(){
+            
+            var wfID = document.getElementById("wfIDHolder").value
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_reset.php',
+                dataType: 'html',
+                data: {
+                    wkf_ID: wfID
+                },
+                success: function (html) {
+                    alert ("Workflow Reset.");
+                    var g=document.createElement('div');
+                    g.setAttribute("id", wfID);
+                    openWorkflow(g);
+                }
+            });
+        }
+
+        function completeStep(stepID){
+            
+            var stepNoteID = stepID + "note";
+            var stepNote =  document.getElementById(stepNoteID).value;
+
+            var wfID = document.getElementById("wfIDHolder").value
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_compStep.php',
+                dataType: 'html',
+                data: {
+                    stp_ID: stepID,
+                    stp_note: stepNote
+                },
+                success: function (html) {
+                    alert("Step Completed.");
+                    if (html == "1"){
+                        alert("Workflow Complete.");
+                    }
+
+                    var g=document.createElement('div');
+                    g.setAttribute("id", wfID);
+                    openWorkflow(g);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("error");
+                }
+            });
+            
         }
 
         <!--
