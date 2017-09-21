@@ -11,10 +11,10 @@ require_once 'dbConnect.php';
 $itemSelect = "<div class='inputControl'><select class='inputField controlSelect' id='wfByItem'><option disabled selected>Select Item</option>";
 $itemSelect2 = "<div class='inputControl'><select class='inputField controlSelect' id='itemByItem'><option disabled selected>Select Item</option>";
 
-$sql = "SELECT DISTINCT WFL_item, ITM_num
-        FROM ITM
-        WHERE ITM_CUS_id = '$custID'
-        ORDER BY ITM_num";
+$sql = "SELECT DISTINCT WFL_item
+        FROM WFL
+        WHERE WFL_CUS_id = '$custID' AND WFL_item NOT LIKE '0'
+        ORDER BY WFL_item";
 
 $result = mysqli_query($conn,$sql);
 
@@ -24,26 +24,23 @@ if($result){
 
         while($row = $result->fetch_assoc()){
 
-            $item = $row['ITM_num'];
-            $itemID = $row['ITM_id'];
+            $item = $row['WFL_item'];
 
-            $itemSelect .= "<option value ='$itemID'>$item</option>";
-            $itemSelect2 .= "<option value ='$itemID'>$item</option>";
+            $itemSelect .= "<option value ='$item'>$item</option>";
         }
 
     }
 }
 
 $itemSelect .= "</select></div>";
-$itemSelect2 .= "</select></div>";
 
 //get list of items for select box
 $groupSelect = "<div class='inputControl'><select class='inputField controlSelect' id='wfByGroup'><option disabled selected>Select Group</option>";
 
-$sql = "SELECT WKO_name, WKO_id
-        FROM WKO
-        WHERE WKO_CUS_id = '$custID' AND WKO_status = 'Active' AND WKO_id NOT LIKE '0'
-        ORDER BY WKO_name";
+$sql = "SELECT DISTINCT WFL_group
+        FROM WFL
+        WHERE WFL_CUS_id = '$custID' AND WFL_group NOT LIKE '0'
+        ORDER BY WFL_group";
 
 $result = mysqli_query($conn,$sql);
 
@@ -53,10 +50,9 @@ if($result){
 
         while($row = $result->fetch_assoc()){
 
-            $woName = $row['WKO_name'];
-            $woID = $row['WKO_id'];
+            $group = $row['WFL_group'];
 
-            $groupSelect .= "<option value ='$woID'>$woName</option>";
+            $groupSelect .= "<option value ='$group'>$group</option>";
         }
 
     }
@@ -83,38 +79,18 @@ $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
         <button onclick='getWorkflowListString()' class='button1'>Search</button>
     </div>";
 
-$ctrlItem = "  
-    <div class='listLabel'>ITEMS BY STATUS</div>
-    <div id='radio-itm-active' onclick='getItemList(\"Active\")' class='selectRadio'>Active</div>
-    <div id='radio-itm-inactive' onclick='getItemList(\"Inactive\")' class='selectRadio'>Inactive</div>
-    <div id='radio-itm-all' onclick='getItemList(\"%\")' class='selectRadio'>All Items</div>
-    <hr>
-    <div id='radio-itm-detail' class='selectRadio'>Item Details</div>
-        $itemSelect2
-    <hr>
-    <div id='radio-itm-text' class='selectRadio'>Text Search</div>
-    <div class='inputControl'>
-        <input type='text' id='stringSearchItem' class='inputField2'>
-        <button onclick='getItemListString()' class='button1'>Search</button>
-    </div>
-    <div id='radio-itm-new' class='selectRadio' onclick='addNewItem()'>New Item</div> ";
-
-
 $controls = "
     <div class='accd_header accd_header_selected' onclick='h0()'>
         Home
+    </div>
+    <div id='activeControl'>
+        
     </div>
     <div class='accd_header' onclick='h1()'>
         Workflows
     </div>
     <div class='accd_content' id='c1' hidden>
         $ctrlWf
-    </div>
-    <div class='accd_header'  onclick='h2()'>
-        Items
-    </div>
-    <div class='accd_content' id='c2' hidden>
-        $ctrlItem
     </div>
     <div class='accd_header'  onclick='h3()'>
         Steps
@@ -130,5 +106,7 @@ $controls = "
     </div>";
 
 echo $controls;
+
+
 
 ?>

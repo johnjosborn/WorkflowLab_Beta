@@ -82,27 +82,28 @@ echo <<<_FixedHTML
             });
         }
 
+        function hActive(){  
+            $("#c1, #c2, #c3, #c4").slideUp();
+            $("#activeContent").slideToggle("slow");
+            $(".accd_header").css("background", "linear-gradient( #555, #444)");
+        }
+
         function h0(){  
             $("#c1, #c2, #c3, #c4").slideUp();
         }
 
         function h1(){  
-            $("#c0, #c2, #c3, #c4").slideUp();
+            $("#c0, #c2, #c3, #c4, #activeContent").slideUp();
             $("#c1").slideToggle("slow");
         }
 
-        function h2(){  
-            $("#c0, #c1, #c3, #c4").slideUp();
-            $("#c2").slideToggle("slow");
-        }
-
         function h3(){  
-            $("#c0, #c1, #c2, #c4").slideUp();
+            $("#c0, #c1, #c2, #c4, #activeContent").slideUp();
             $("#c3").slideToggle("slow");
         }   
 
         function h4(){  
-            $("#c0, #c1, #c2, #c3").slideUp();
+            $("#c0, #c1, #c2, #c3, #activeContent").slideUp();
             $("#c4").slideToggle("slow");
         }
 
@@ -191,8 +192,59 @@ echo <<<_FixedHTML
                     wf_id : wfID
                 },
                 success: function (html) {
-                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);  
+                    $(".accd_header").css("background", "linear-gradient( #555, #444)");
 
+                    $.ajax({
+                        type: 'POST',
+                        url: 'fp/wf_stepIndex.php',
+                        dataType: 'html',
+                        data: {
+                            wf_id : wfID
+                        },
+                        success: function (html) {
+
+                            var result = $.parseJSON(html);
+
+                            var stepIndex = result[0];
+
+                            $( "#stepAccordian" ).accordion({
+                                active: stepIndex,
+                                collapsible: true,
+                                header: ".stepHeader",
+                                heightStyle: "content",
+                                animate: 500
+                            });
+
+                            $('#stepAccordian .stepHeader').bind('click',function(){
+                                var self = this;
+                                setTimeout(function() {
+                                    theOffset = $(self).position();
+                                    theNextOffset = $('#stepAccordian').position();
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1000);
+                                }, 510); // ensure the collapse animation is done
+                            });
+
+                            $(function(){
+                                var self =  $('#openStep');
+                                setTimeout(function() {
+                                    theOffset = $(self).position();
+                                    theNextOffset = $('#stepAccordian').position();
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1500);
+                                }, 10); // ensure the collapse animation is done
+                            });
+
+
+                            $(function(){
+                                $('#progress').progressbar({
+                                    value: result[1] / result[2] * 100
+                                });
+                            });
+
+                            getWFHeader(wfID);
+                        
+                        }
+                    });
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
@@ -200,7 +252,28 @@ echo <<<_FixedHTML
             });
         }
 
+        function getWFHeader(wfID){
+           
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_getHeader.php',   
+                dataType: 'html',
+                data: {
+                    wf_id : wfID
+                },
+                success: function (html) {
+                    $("#c1, #c3, #c4").slideUp();
+                    $("#activeControl").html(html).slideDown("slow", function(){
+                        $("#activeContent").slideDown("slow");
+                    });
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#activeControl").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
 
+        <!--
         function addNewItem() {
 
             $.ajax({
@@ -384,6 +457,8 @@ echo <<<_FixedHTML
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
             $("#radio-itm-detail").css("background", "#3E8553");
         })
+
+        -->
 
     </script>
 </body>

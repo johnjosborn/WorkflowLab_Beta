@@ -14,6 +14,14 @@ body {
     background-size: 100% 100%;
 }
 
+textarea{
+    width: 96%;
+    height: 100%;
+    padding: .2em;
+    margin: .2em 0 0 0;
+    background: #fff;
+}
+
 /* FRAMEWORK */
 
 #wfTitle{
@@ -70,16 +78,18 @@ body {
     border: none;
     overflow: hidden;
     padding: 3em;
-    height: 95%;
+    height: 100%;
 }
 
 #contentUpdate{
-    border: none;
-    overflow: auto;
+    border: none; 
+    overflow: hidden;
+    height: 90%;
+    padding: 0 0 2em 0;
 }
 
 .contentTitle{
-    background: #2C5C83;
+    background: #000000;
     margin: 0 auto;
     display: block;
     padding: .2em 3em;
@@ -97,6 +107,9 @@ body {
     border-radius: 0 0 10px 10px;
     border: 1px solid #666;
     padding: 1em 2em;
+    max-height: 88%;
+    overflow: auto;
+    margin: 0 0 1em 0;
 }
 
 .inputTable{
@@ -253,6 +266,16 @@ table.tablesorter thead tr .headerSortDown {
     background: #2C5C83;
 }
 
+.accd_header_active{
+    margin: .2em 0;
+    padding: .2em 0 .2em 1em;
+    background: linear-gradient( #FF2F00, #5E1100);
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 1.25em;
+}
+
 .temp{
     color: #3E8553;
 }
@@ -350,4 +373,171 @@ button.button1{
     height: 100%;
     text-align: left;
     margin: 0;
+}
+
+/* PROGRESS BAR */
+#progress{
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+    height: 1.5em;
+}
+
+.ui-progressbar {
+    height: 1em;
+    margin: .5em 2em;
+    background: #999;
+  }
+
+.progressText {
+    position: absolute;
+    font-size: 1em;
+    left: 10%;
+    bottom: 10%;
+    font-weight: bold;
+    font-family: 'Open Sans Condensed', sans-serif;
+  }
+
+.ui-progressbar-value{
+    background: #7cd85b;
+    border-right: 3px solid #193E5C;
+}
+
+/* STATUS STYLING */
+
+.stepOpen{
+    background-color: #2969d1;
+    color: white; 
+ }
+ 
+ .stepPending{
+    background-color: #999;
+    color: black; 
+ }
+ 
+ .stepComplete{
+    background-color: #7cd85b;
+    color: black; 
+ }
+ 
+ .stepDelete{
+     background-color: #E66666;
+     color: black;   
+ }
+
+
+
+/* WORKFLOW ACCORDIAN DISPLAY */
+#stepAccordian{
+    padding: .2em;
+    font-size: 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.ui-accordion .ui-accordion-content{
+    padding: .5em;
+    border-radius: 0 0 5px 5px;
+}
+
+.ui-accordion-header-active{
+    border: none;
+}
+
+.sortable-placeholder {
+	height: 2em;
+	line-height: 2em;
+    border: 1px solid #666;
+    margin: .2em;
+	background: #F6FF93;
+}
+
+/* WORKFLOW HEADER */
+
+.wfHeader{
+    margin: 0 auto;
+    padding: .5em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1.25em;
+    background: #fff;
+    width: 75%;
+}
+
+.wfHeader th{
+    background: #DDDDDD;
+    padding: .2em 2em;
+}
+
+.wfHeader td{
+    background: #BFD6FF;  
+    padding: .2em 2em;  
+}
+
+.labelDiv{
+    width: 40%;
+    margin: .2em auto 0 0;
+    padding: .2em 0 .2em 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1em;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient( #333, #444);
+    border: none;
+    color: #fff;
+}
+
+.dataDiv{
+    font-size: 1.1em;
+    padding: .1em .5em;
+    background-color: #BFD6FF;
+    margin: 0 0 .2em 0;
+    border: 1px solid #999;
+}
+
+#workflowHeader{
+    padding: 0 1em 0 1em;
+}
+
+
+/* STEPS DISPLAY */
+
+.orderBox{
+    display: inline-block;
+    width: 3em;
+    text-align: center;
+}
+
+.titleBox{
+    display: inline;
+    margin-right: 2em;
+}
+
+.detLabel{
+    font-size: .8em;
+    background: #531414;
+    color: white;
+    display: inline-block;
+    margin: 0;
+    padding: .2em .5em;
+    border: 1px solid gray;
+}
+.detData{
+    font-size: 1em;
+    padding: .2em .5em;
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+    margin: 0 0 .25em 0;
+    background: #eee;
+}
+
+/* GENERAL */
+
+.left{
+    float: left;
+}
+
+.right{
+    float: right;
+}
+
+.inlineB{
+    display: inline-block;
 }

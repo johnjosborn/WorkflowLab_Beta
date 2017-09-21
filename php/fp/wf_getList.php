@@ -24,7 +24,7 @@ if (isset($_POST['search_type'])){
 
             $searchTerm = $_POST['search_term'];
 
-            $whereClause = "AND WKO_ITM_id = '$searchTerm'";
+            $whereClause = "AND WFL_item = '$searchTerm'";
 
             $status = "By Item";
 
@@ -34,7 +34,7 @@ if (isset($_POST['search_type'])){
         
                     $searchTerm = $_POST['search_term'];
         
-                    $whereClause = "AND WKO_id = '$searchTerm'";
+                    $whereClause = "AND WFL_group = '$searchTerm'";
         
                     $status = "By Group";
         
@@ -44,11 +44,12 @@ if (isset($_POST['search_type'])){
 
             $searchTerm = $_POST['search_term'];
 
+            $status = "Workflows Containing Search Term: \"$searchTerm\"";
+            
             $searchTerm = "%" . $searchTerm . "%";
 
-            $whereClause = "AND (ITM_num Like '$searchTerm' OR ITM_desc Like '$searchTerm' OR WFL_num Like '$searchTerm')";
+            $whereClause = "AND (WFL_item Like '$searchTerm' OR WFL_desc Like '$searchTerm' OR WFL_num Like '$searchTerm')";
 
-            $status = "Workflows Containing Search Term: \"$searchTerm\"";
         
             break;
 
@@ -71,14 +72,12 @@ if (isset($_POST['search_type'])){
     }
 
     $output = "<div class='contentTitle'>
-                    Workflow List :  $status
+                    $status
                 </div>
                 <div class='contentHolder'>";
 
-    $sql = "SELECT WFL_id, WFL_num, WFL_status, ITM_num, ITM_desc, WKO_name
+    $sql = "SELECT WFL_id, WFL_num, WFL_status, WFL_item, WFL_desc, WFL_group
             FROM WFL
-            INNER JOIN WKO ON WFL_WKO_id = WKO.WKO_id
-            INNER JOIN ITM ON ITM.ITM_id = WKO.WKO_ITM_id
             WHERE WFL_CUS_id = '$custID' $whereClause";
         
 $result = mysqli_query($conn,$sql);
@@ -93,6 +92,7 @@ if($result){
                 <th>Number</th>
                 <th>Item</th>
                 <th>Description</th>
+                <th>Group</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -158,10 +158,17 @@ if($result){
                 }
             }
 
+            $group = $row['WFL_group'];
+
+            if($group == "0"){
+                $group = '';
+            }
+
             $output .= "<tr onclick='openWorkflow(this)' id='" . $row['WFL_id'] . "'>
                 <td>" . $row['WFL_num'] . "</td>
-                <td>" . $row['ITM_num'] . "</td>
-                <td>" . $row['ITM_desc'] . "</td>
+                <td>" . $row['WFL_item'] . "</td>
+                <td>" . $row['WFL_desc'] . "</td>
+                <td>$group</td>
                 <td class='compHolder'><div style='width:$percentCompWidth;' class='wfCompDisplay'>&nbsp$percentText</div></td></tr>";
         }
 
