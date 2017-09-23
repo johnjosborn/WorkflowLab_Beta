@@ -22,7 +22,7 @@ if (isset($_POST['wfl_id'])){
 
     //Query Workflow
 
-    $sql = "SELECT WFL_id, WFL_item, WFL_num, WFL_desc, WFL_status, WFL_ref, WFL_group
+    $sql = "SELECT WFL_id, WFL_item, WFL_num, WFL_desc, WFL_status, WFL_ref, WFL_group, WFL_notes
             FROM WFL
             WHERE WFL_CUS_id = '$custID' AND WFL_id = '$wfID'";
         
@@ -40,6 +40,7 @@ if (isset($_POST['wfl_id'])){
                 $wfSta = $row['WFL_status'];
                 $wfRef = $row['WFL_ref'];
                 $wfGrp = $row['WFL_group'];
+                $wfNot = $row['WFL_notes'];
             
 
                 $wfStaC = "";
@@ -73,32 +74,35 @@ if (isset($_POST['wfl_id'])){
 
                 //Workflow header
                 $workFlowHeader = "
-                                    <div id='wfContainer' class='container'>
-                                        <div class='titleDiv'>WORKFLOW INFO</div>
-                                        <div class='labelDiv'>Number</div>
-                                        <div class='dataInputDiv'>
-                                            <input id='wfNum' value='$wfNumber' class='textTableInput'></div>
-                                        <div class='labelDiv'>Item</div>
-                                        <div class='dataInputDiv'>
-                                            <input id='wfItem' value='$wfItem' class='textTableInput'></div>
-                                        <div class='labelDiv'>Description</div>
-                                        <div class='dataInputDiv'>
-                                            <input id='wfDesc' value='$wfDesc' class='textTableInput'></div>
-                                        <div class='labelDiv'>Reference</div>
-                                        <div class='dataInputDiv'>
-                                            <input id='wfRef' value='$wfRef' class='textTableInput'></div>   
-                                        <div class='labelDiv'>Group</div>
-                                        <div class='dataInputDiv'>
-                                            <input id='wfGrp' value='$wfGrp' class='textTableInput'></div>      
-                                        <div class='labelDiv'>Status</div>
-                                        <div class='dataDiv'>$statusSelect</div>
-                                        <div id='headerEditButtons' class='headerItems'>
-                                            <input type='button' class='button1' onclick='saveWfHeader($wfID)' value='Save'>
-                                            <input type='button' class='button1' onclick='undoWfHeader($wfID)' value='Undo'>
-                                        </div>
-                                            <input type='button' class='button1' onclick='resetWf($wfID)' value='Reset'>
-                                    </div>
-                                    ";
+                    <div id='wfContainer' class='container'>
+                        <div class='labelDiv'>Number</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfNum' value='$wfNumber' class='textTableInput'></div>
+                        <div class='labelDiv'>Item</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfItem' value='$wfItem' class='textTableInput'></div>
+                        <div class='labelDiv'>Description</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfDesc' value='$wfDesc' class='textTableInput'></div>
+                        <div class='labelDiv'>Reference</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfRef' value='$wfRef' class='textTableInput'></div>   
+                        <div class='labelDiv'>Group</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfGrp' value='$wfGrp' class='textTableInput'></div>      
+                        <div class='labelDiv'>Notes</div>
+                        <div class='dataInputDiv'>
+                            <input id='wfNot' value='$wfNot' class='textTableInput'></div> 
+                        <div class='labelDiv'>Status</div>
+                        <div class='dataInputDiv'>$statusSelect</div>
+                        <div class='scaleText1 alignRight'>
+                            <input type='button' class='button buttonRed editH' onclick='saveWfHeader($wfID)' value='Save' hidden>
+                            <input type='button' class='button buttonGray editH' onclick='undoWfHeader($wfID)' value='Undo' hidden>
+                            <input type='button' class='button buttonBlue editH' onclick='cancelEdit($wfID)' value='Exit Edit Mode'>
+                        </div>
+                        <input type='hidden' id='wfID' value='$wfID'>
+                    </div>
+                    ";
 
             }
         }

@@ -109,7 +109,7 @@ function sendEmail($email, $message){
         //send the message, check for errors
         if (!$mail->send()) {
             echo "There was a problem sending the verification email.<br>Please try again.<br>
-            <button onclick='resendVerification()' class='button1'>Resend verification email.</button><br>
+            <input type='button' onclick='resendVerification()' class='button buttonBlue' value='Resend verification email.'><br>
             <a href='mailto:info@lab627.com'>Contact Us</a> if you still have problems.<br>
             ref: " . $mail->ErrorInfo;
         } else {

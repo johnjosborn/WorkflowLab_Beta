@@ -31,7 +31,7 @@ if (isset($_POST['wfl_id'])){
 
     if($result){
     
-        $steps = "";
+        $steps = "<div id='stepAccordian' class='connectedSortable'>";
 
         if($result->num_rows != 0){
 
@@ -39,13 +39,10 @@ if (isset($_POST['wfl_id'])){
 
                 $thisStatus = $row['STP_status'];
 
-                $markOpen = "";
-
                 switch($thisStatus){
 
                     case "Open":
                         $class = "stepOpen";
-                        $markOpen = "id='openStep'";
                     break;
 
                     case "Pending":
@@ -58,6 +55,7 @@ if (isset($_POST['wfl_id'])){
                 }
 
                 $stpID = $row['STP_id'] . 'x';
+                $stpIDBase = $row['STP_id'];
                 $stpTitle = $row['STP_title'];
                 $stpDesc = $row['STP_desc'];
                 $stpDetails = $row['STP_detail'];
@@ -66,59 +64,97 @@ if (isset($_POST['wfl_id'])){
                 $stpDate = $row['STP_date'];
                 $stpNotes = $row['STP_note'];
 
-                $steps .= "<div class='s_panel' id='$stpID'>
-                    <div class='stepHeader $class' $markOpen>
-                        <div class='orderBox'>$stpOrder</div>
-                        <div class='titleBox'>$stpTitle</div>
-                    </div>
-                <div class='stepDetail'>
-                    <div class='detLabel'>Description</div>
-                    <div class='detData minHeight'>$stpDesc</div>
-                    <div class='detLabel'>Details</div>
-                    <div class='detData minHeight'>$stpDetails</div>";
+                $users = "";
+                
+                //get list of users
+                $sqlUsr = "SELECT USR_id, USR_name
+                        FROM USR
+                        WHERE USR_CUS_id = '$custID'
+                        ORDER By USR_name";
 
-                if ($thisStatus == "Complete"){
+                $resultUsr = mysqli_query($conn,$sqlUsr);
 
-                    //get user name from id
-                    $sqlUsr = "SELECT USR_name
-                    FROM USR
-                    WHERE USR_id = '$stpUsr'";
-                    
-                    $resultUsr = mysqli_query($conn,$sqlUsr);
+                if($resultUsr){
+                
+                    $users = "<select id='$stpIDBase' onchange='userChange(this)' class='textTableInput stepInput'>";
 
-                    if($resultUsr){
-
-                        if($resultUsr->num_rows != 0){
-
-                            while($row = $resultUsr->fetch_assoc()){
-
-                                $stpName = $row['USR_name'];
-                            }
-                        }
+                    if ($stpUsr == 0){
+                        $users .= "<option disabled selected value='0'>Select User</option>";
                     }
 
-                    $steps .= " <div class='detLabel'>Notes</div>
-                                <div class='detData minHeight'>$stpNotes</div>
-                                <div class='detLabel'>Completed By:</div>
-                                <div class='detData'>$stpName on  $stpDate</div>
-                                <button class='button1'>Re-Set</button>
-                                ";
+                    if($resultUsr->num_rows != 0){
 
-                } else if ($thisStatus == "Open"){
-                    $steps .= " <div class='detLabel'>Notes</div>
-                                <div class='detData minHeight'>
-                                    $stpNotes
-                                </div>";
+                        while($rowUsr = $resultUsr->fetch_assoc()){
+
+                            if ($rowUsr['USR_id'] == $stpUsr){
+                                $users .= "<option value='" .$rowUsr['USR_id'] . "' selected>" .$rowUsr['USR_name'] . "</option>";
+                            } else {
+                                $users .= "<option value='" .$rowUsr['USR_id'] . "'>" .$rowUsr['USR_name'] . "</option>";
+                            }
+
+                        }
+
+                        $users .= "</select>";
+
+                    }
+
+                } else {
+                    $users = "No users found.";
                 }
 
-                $steps .= "<button class='button1'>Edit</button></div></div>";
 
-            }
+                $steps .= "<div class='s_panel' id='$stpID'>
+                <div class='stepHeader $class'>
+                    <div class='orderBox'>$stpOrder</div>
+                    <div class='titleBox'>$stpTitle</div>
+                </div>
+            <div class='stepDetail'>
+                <div class='labelDiv'>Title</div>
+                <div class='dataInputDiv'>
+                    <input id='stpTitle$stpIDBase' value='$stpTitle' class='textTableInput stepInput'>
+                </div>
+                <div class='labelDiv'>Description</div>
+                <div class='dataInputDiv'>
+                    <input id='stpDesc$stpIDBase' value='$stpDesc' class='textTableInput stepInput'>
+                </div>
+                <div class='labelDiv'>Details</div>
+                <div class='dataInputDiv'>
+                    <input id='stpDetail$stpIDBase' value='$stpDetails' class='textTableInput stepInput'>
+                </div>
+                <div class='labelDiv'>Notes</div>
+                <div class='dataInputDiv'>
+                    <input id='stpNotes$stpIDBase' value='$stpNotes' class='textTableInput stepInput'>
+                </div>
+                <div class='labelDiv'>Completed By:</div>
+                <div class='dataInputDiv'>
+                    $users   
+                    <input type='hidden' id='userStore$stpIDBase' value='$stpUsr'>
+                </div>
+                <div class='labelDiv'>Completed Date:</div>
+                <div class='dataInputDiv'>
+                    <input type='text' id='stpDate$stpIDBase' value='$stpDate' class='datePicker textTableInput stepInput'>
+                </div>";
+
+        if ($thisStatus == "Complete"){
+
+        $steps .= "<button class='button buttonGray' onclick='resetStep($stpIDBase)'>Re-Set</button>";
+
         }
+
+        $steps .= " <div id='stepEditButtons$stpID' class='headerItems stepButtons' hidden>
+                        <button class='button buttonRed' onclick='saveEditedStep($stpIDBase)'>Save Changes</button>
+                        <button class='button buttonGray' onclick='getModSteps($stpIDBase)'>Undo Changes</button>
+                    </div>
+                    </div></div>";
+
+        }
+
+    }
+
+    $steps .= "</div></div>";
+
     } else { $steps = "Bad query"; }
 
-} else { $steps = "Post not set"; }
+}
 
 echo $steps;
-
-?>

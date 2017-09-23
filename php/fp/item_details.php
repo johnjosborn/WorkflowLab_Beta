@@ -121,9 +121,9 @@ if (isset($_POST['item_id'])){
                     
                     </th>
                     <td>
-                        <button class='button1' onclick='editChangeItem()' id='btnEditItemChg'>Edit</button>
-                        <button class='button1' onclick='saveChangeItem($itemID)' id='btnSaveItemChg' hidden>Save</button>
-                        <button class='button1' onclick='getItemDetails($itemID)' id='btnUndoItemChg' hidden>Undo</button>
+                        <button class='button buttonBLue' onclick='editChangeItem()' id='btnEditItemChg'>Edit</button>
+                        <button class='button buttonRed' onclick='saveChangeItem($itemID)' id='btnSaveItemChg' hidden>Save</button>
+                        <button class='button buttonGray' onclick='getItemDetails($itemID)' id='btnUndoItemChg' hidden>Undo</button>
                     </td>
                 </tr>
                 </table>";

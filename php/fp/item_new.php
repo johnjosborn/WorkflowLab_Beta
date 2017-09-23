@@ -50,8 +50,8 @@ $output = " <div class='contentTitle'>
                        
                     </th>
                     <td>
-                        <button class='button1' onclick='saveNewItem()'>Save</button>
-                        <button class='button1' onclick='clearNewItem()'>Clear</button>
+                        <button class='button buttonRed' onclick='saveNewItem()'>Save</button>
+                        <button class='button buttonGray' onclick='clearNewItem()'>Clear</button>
                     </td>
                 </tr>
                 </table>

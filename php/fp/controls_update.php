@@ -76,7 +76,7 @@ $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
     <div id='radio-wf-text' class='selectRadio'>Text Search</div>
     <div class='inputControl'>
         <input type='text' id='stringSearchWF' class='inputField2'>
-        <input type='button' onclick='getWorkflowListString()' class='button1' value='Search'>
+        <input type='button' onclick='getWorkflowListString()' class='button buttonBlue' value='Search'>
     </div>";
 
 $controls = "

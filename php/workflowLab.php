@@ -42,16 +42,7 @@ echo <<<_FixedHTML
         </div>
     </div>
     <div id="content">
-        <div id='controlShow'  class='point'><img src='../media/show.png'></div>
-        <div id='info'>
-            <div id='userIcon' class='point'>
-                <img src='../media/user.png'> 
-            </div>
-            <div id='userMenu'>
-                <div class='listItem'>Item number 1</div>
-                <div class='listItem'>Item2</div>
-            </div>
-        </div>   
+        <div id='controlShow'  class='point'><img src='../media/show.png'></div> 
         <div id='contentContainer'>
             <div id='contentUpdate'>
                 
@@ -119,12 +110,6 @@ echo <<<_FixedHTML
         $('body').on('click', '.selectRadio', function() {
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
             $(this).css("background", "#3E8553");  
-        });
-
-        $("#userMenu").hide();
-
-        $('body').on('click', '#userIcon', function() {
-            $("#userMenu").fadeToggle();           
         });
     
         $('body').on('click', '#controlHide', function() {
@@ -278,7 +263,8 @@ echo <<<_FixedHTML
         function editWf(wfID){
 
             getModHeader(wfID);
-
+            getModAvailOps(wfID);
+            getModSteps(wfID);
         }
 
         function getModHeader(wfID){
@@ -292,7 +278,6 @@ echo <<<_FixedHTML
                 },
                 success: function (html) {
                    $("#activeContent").hide().fadeIn("slow").html(html);
-                   getModAvailOps(wfID);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading workflow.");
@@ -312,7 +297,6 @@ echo <<<_FixedHTML
                 success: function (html) {
                    $("#contentUpdate").hide().fadeIn("slow").html(html);
                    opsSortable();
-                   getModSteps(wfID);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
@@ -330,8 +314,9 @@ echo <<<_FixedHTML
                    wfl_id : wfID
                 },
                 success: function (html) {
-                   $("#stepAccordian").hide().fadeIn("slow").html(html);
+                   $("#stepsUpdate").hide().fadeIn("slow").html(html);
                    modAccordian();
+                   $('.stepButtons').hide();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
@@ -378,7 +363,7 @@ echo <<<_FixedHTML
             });
 
             //$('#wfEditButtons').hide();
-            //$('.stepButtons').hide();
+            
 
             $('#stepAccordian .stepHeader').bind('click',function(){
                 var self = this;
@@ -419,9 +404,29 @@ echo <<<_FixedHTML
             });
         }
 
+        $(document).on("input", "#wfContainer input.textTableInput", function () {
+            this.style.backgroundColor = '#FDF19D';
+            $('.editH').show();
+        });
+
+        function statusChange(e){
+            var thisStatus = e.options[e.selectedIndex].value;
+            $('#staStore').val(thisStatus);
+            e.style.backgroundColor = '#FDF19D';
+            $('.editH').show();
+        }
+
+        function cancelEdit(wfID){
+
+            var g=document.createElement('div');
+            g.setAttribute("id", wfID);
+            openWorkflow(g);
+
+        }
+
         function resetWf(){
-            
-            var wfID = document.getElementById("wfIDHolder").value
+
+            var wfID = document.getElementById("wfID").value
 
             $.ajax({
                 type: 'POST',
@@ -431,12 +436,71 @@ echo <<<_FixedHTML
                     wkf_ID: wfID
                 },
                 success: function (html) {
-                    alert ("Workflow Reset.");
-                    var g=document.createElement('div');
-                    g.setAttribute("id", wfID);
-                    openWorkflow(g);
+                    // alert ("Workflow Reset.");
+                    // var g=document.createElement('div');
+                    // g.setAttribute("id", wfID);
+                    editWf(wfID)
                 }
             });
+        }
+
+        function saveWfHeader(){
+            
+            var wkfID = $('#wfID').val();
+            var wkfNum = $('#wfNum').val();
+            var wkfItem = $('#wfItem').val();
+            var wkfDesc = $('#wfDesc').val();
+            var wkfSta = $('#staStore').val();
+            var wkfRef = $('#wfRef').val();
+            var wkfGrp = $('#wfGrp').val();
+            var wkfNot = $('#wfNot').val();
+                        
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_save_header.php',
+                dataType: 'html',
+                data: {
+                    wkf_ID: wkfID,
+                    wkf_Num: wkfNum,
+                    wkf_Item: wkfItem,
+                    wkf_Desc: wkfDesc,
+                    wkf_Sta: wkfSta,
+                    wkf_Ref: wkfRef,
+                    wkf_Grp: wkfGrp,
+                    wkf_Not: wkfNot
+                },
+                success: function (html) {
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else if (html == 2){
+                        alert("Error sending data.");
+                    } 
+                    getModHeader(wkfID);
+                    modAccordian();
+                }
+            }); 
+        }
+
+        $(document).on("input", "#accordionHolder input.stepInput", function () {
+            this.style.backgroundColor = '#FDF19D';
+            var buttonDiv = '#stepEditButtons' + $(this).closest('.s_panel').attr('id');
+            $(buttonDiv).show();
+        });
+
+        $(document).on("input change", "#accordionHolder input.datePicker", function () {
+            this.style.backgroundColor = '#FDF19D';
+            var buttonDiv = '#stepEditButtons' + $(this).closest('.s_panel').attr('id');
+            $(buttonDiv).show();
+        });
+
+        function userChange(e){
+            var thisUser = e.options[e.selectedIndex].value;
+            var thisStep = e.id;
+
+            document.getElementById('userStore' + thisStep).value = thisUser;
+            e.style.backgroundColor = '#FDF19D';
+            var buttonDiv = '#stepEditButtons' + $(e).closest('.s_panel').attr('id');
+            $(buttonDiv).show();
         }
 
         function completeStep(stepID){
@@ -469,6 +533,42 @@ echo <<<_FixedHTML
                 }
             });
             
+        }
+
+        function saveEditedStep(stpID){
+
+            var stpUser = $('#userStore' + stpID).val();
+            var stpNotes = $('#stpNotes' + stpID).val();   
+            var stpTitle = $('#stpTitle' + stpID).val();
+            var stpDesc = $('#stpDesc' + stpID).val();
+            var stpDetail = $('#stpDetail' + stpID).val();
+            var stpDate = $('#stpDate' + stpID).val();
+
+            var wfID = $('#wfID').val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_save_step_change.php',   
+                dataType: 'html',
+                data: {
+                    stp_ID : stpID,
+                    stp_title : stpTitle,
+                    stp_desc : stpDesc,
+                    stp_detail : stpDetail,
+                    stp_notes : stpNotes,
+                    stp_user : stpUser,
+                    stp_date : stpDate
+                },
+                success: function (html) {
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else if (html == 2){
+                        alert("Error sending data.");
+                    } 
+                    getModSteps(wfID);
+                }
+
+            });
         }
 
         <!--

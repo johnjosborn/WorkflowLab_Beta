@@ -19,7 +19,7 @@ if (!$conn) {
 
 if (isset($_POST['wfl_id'])){
 
-    $activeWkf = $_POST['wfl_id'];
+    $wfID = $_POST['wfl_id'];
 
     //All the available steps
     $sql = "SELECT OPS_id, OPS_title, OPS_desc
@@ -31,10 +31,10 @@ if (isset($_POST['wfl_id'])){
 
     if($result){
 
-        $ops = "<div class='opsHeader toggleDiv'>Available Steps</div>
+        $ops = "<div class='opsHead'>Available Steps</div>
                 <div id='opsContainer' class='opsContainer'>
-                <div class='opsSubheader'>Click & Drag to Workflow to Add --></div>
-                <div id='sourceOps' class='connectedSortable'>";
+                    <div class='opsSub'>Click or Drag to Workflow to Add --></div>
+                    <div id='sourceOps' class='connectedSortable'>";
 
         if($result->num_rows != 0){
 
@@ -63,7 +63,7 @@ if (isset($_POST['wfl_id'])){
 //Query Workflow
 $sql = "SELECT WFL_id, WFL_item, WFL_num, WFL_desc, WFL_status, WFL_ref, WFL_group
 FROM WFL
-WHERE WFL_CUS_id = '$custID' AND WFL_id = '$activeWkf'";
+WHERE WFL_CUS_id = '$custID' AND WFL_id = '$wfID'";
     
 $result = mysqli_query($conn,$sql);
 
@@ -90,7 +90,14 @@ $output = "<div class='contentTitle'>
                     <div id='ops'>$ops</div>
                 </div>
                 <div id='accordionHolder'class='rightDiv scrollable'>
-                    <div id='stepAccordian' class='connectedSortable'>
+                <div class='opsHead'>Current Workflow Steps
+                    <div class='right scaleText2'>
+                        <input type='button' class='button buttonBlue' onclick='resetWf()' value='Reset to Beginning'>
+                    </div>
+                </div>
+                
+                <div class='opsSub'>Drag Steps to Change Order.  Drag Away to Delete.</div>
+                    <div id='stepsUpdate'>
                     steps
                     </div>
                 </div>

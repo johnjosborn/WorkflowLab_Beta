@@ -26,7 +26,7 @@ if (isset($_POST['wf_id'])){
     $wfID = $_POST['wf_id'];
     //Query Workflow
 
-    $sql = "SELECT WFL_item, WFL_num, WFL_desc, WFL_status, WFL_notes, WFL_ref, WFL_group
+    $sql = "SELECT WFL_item, WFL_num, WFL_desc, WFL_status, WFL_notes, WFL_ref, WFL_group, WFL_notes
             FROM WFL
             WHERE WFL_CUS_id = '$custID' AND WFL_id = '$wfID'";
     
@@ -41,10 +41,11 @@ if (isset($_POST['wf_id'])){
                 $wfNum = $row['WFL_num'];
                 $wfItem = $row['WFL_item'];
                 $wfDesc = $row['WFL_desc'];
-                $wfStatus = $row['WFL_status'];
+                $wfSta = $row['WFL_status'];
                 $wfNotes = $row['WFL_notes'];
                 $wfRef = $row['WFL_ref'];
                 $wfGroup = $row['WFL_group'];
+                $wfNot = $row['WFL_notes'];
 
                 //Workflow header
                 $workFlowHeader = "
@@ -58,9 +59,12 @@ if (isset($_POST['wf_id'])){
                     <div class='labelDiv'>Referece</div>
                     <div class='dataDiv minHeight'>$wfRef</div>
                     <div class='labelDiv'>Notes</div>
-                    <div class='dataDiv minHeight'>$wfRef</div>
-                    <input type='button' class='button1' onclick='resetWf($wfID)' value='Reset'>
-                    <input type='button' class='button1' onclick='editWf($wfID)' value='Modify'>
+                    <div class='dataDiv minHeight'>$wfNot</div>
+                    <div class='labelDiv'>Status</div>
+                    <div class='dataDiv minHeight'>$wfSta</div>
+                    <div class='scaleText1 alignRight'>
+                        <input type='button' class='button buttonBlue' onclick='editWf($wfID)' value='Modify'>
+                    </div>
                     <input type='hidden' id='wfIDHolder' value='$wfID'>
                 </div>";
             }

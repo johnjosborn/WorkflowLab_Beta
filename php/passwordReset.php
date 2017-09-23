@@ -68,7 +68,8 @@ if (isset($_GET['email']) && isset($_GET['t'])){
                                 <td><input type='password' id='password2' class='regInput'></td>
                             </tr>
                             <tr>
-                                <td><input type='hidden' id='token' value='$token'></td><td><button onclick='changePassword()' class='button1'>Re-Set Password</button></td><td></td>
+                                <td><input type='hidden' id='token' value='$token'></td>
+                                <td><input type='button' onclick='changePassword()' class='button buttonBlue' value='Reset Password' /></td><td></td>
                             </tr>
                         </tbody>
                     </table>";
@@ -92,7 +93,7 @@ if (isset($_GET['email']) && isset($_GET['t'])){
                                     <td>Try the email link again or</td>
                                 </tr>
                                 <tr>
-                                    <td><button onclick='resetPassword()' class='button1' id='resetButton'>Click to Resend email</button></td>
+                                    <td><input type='button' onclick='resetPassword()' class='button buttonBlue' id='resetButton' value='Click to Resend email' /></td>
                                 </tr>
                             </tbody>
                         </table>";
@@ -129,7 +130,7 @@ echo <<<_FixedHTML
             if (!email){
 
                 $('#email').css("background-color", "#F9F9A7");
-                $("#loginRight").hide().fadeIn("slow").html("Enter the email to to reset the password.<br><br><button onclick='resetPassword()' class='button1' id='resetButton'>Click to Reset Password</button>");
+                $("#loginRight").hide().fadeIn("slow").html("Enter the email to to reset the password.<br><br><button onclick='resetPassword()' class='button buttonBlue' id='resetButton'>Click to Reset Password</button>");
 
             } else {
 

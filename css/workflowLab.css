@@ -77,7 +77,7 @@ textarea{
 #contentContainer{
     border: none;
     overflow: hidden;
-    padding: 3em;
+    padding: 2em 3em;
     height: 100%;
 }
 
@@ -337,32 +337,82 @@ table.tablesorter thead tr .headerSortDown {
     font-family: 'Open Sans Condensed', sans-serif;
 }
 
-.button1{
-    margin: .2em;
+/* BUTTON STYLING */
+
+.button{
+    margin: .5em 1em;
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 3px;
+    font-size: 1em;
+    padding: .25em .5em;
+    text-decoration: none;
+}
+
+.buttonGray{
+    margin: .5em 1em;
+    background: #575757;
+    background-image: -webkit-linear-gradient(top, #747474, #575757 );
+    background-image: -moz-linear-gradient(top, #747474, #575757 );
+    background-image: -ms-linear-gradient(top, #747474, #575757 );
+    background-image: -o-linear-gradient(top, #747474, #575757 );
+    background-image: linear-gradient(to bottom, #747474, #575757 );
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 1em;
+    padding: .25em .5em;
+    text-decoration: none;
+}
+
+.buttonGray:hover{
+    background: #747474;
+    background-image: -webkit-linear-gradient(top, #9B9B9B,  #747474);
+    background-image: -moz-linear-gradient(top, #9B9B9B,  #747474);
+    background-image: -ms-linear-gradient(top, #9B9B9B,  #747474);
+    background-image: -o-linear-gradient(top, #9B9B9B,  #747474);
+    background-image: linear-gradient(to bottom, #9B9B9B,  #747474);
+    text-decoration: none;    
+}
+
+.buttonRed{
+    background: #F33434;
+    background-image: -webkit-linear-gradient(top, #F33434, #FF1616 );
+    background-image: -moz-linear-gradient(top, #F33434, #FF1616 );
+    background-image: -ms-linear-gradient(top, #F33434, #FF1616 );
+    background-image: -o-linear-gradient(top, #F33434, #FF1616 );
+    background-image: linear-gradient(to bottom, #F33434, #FF1616 );
+    color: #ffffff;
+}
+
+.buttonRed:hover{
+    background: #FE5B5B;
+    background-image: -webkit-linear-gradient(top,  #FF8F8F,  #FE5B5B);
+    background-image: -moz-linear-gradient(top, #FF8F8F,  #FE5B5B);
+    background-image: -ms-linear-gradient(top, #FF8F8F,  #FE5B5B);
+    background-image: -o-linear-gradient(top, #FF8F8F,  #FE5B5B);
+    background-image: linear-gradient(to bottom, #FF8F8F,  #FE5B5B);
+    text-decoration: none;    
+}
+
+.buttonBlue{
     background: #3498db;
     background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
     background-image: -moz-linear-gradient(top, #3498db, #2980b9);
     background-image: -ms-linear-gradient(top, #3498db, #2980b9);
     background-image: -o-linear-gradient(top, #3498db, #2980b9);
     background-image: linear-gradient(to bottom, #3498db, #2980b9);
-    -webkit-border-radius: 6;
-    -moz-border-radius: 6;
-    border-radius: 6px;
     color: #ffffff;
-    padding: .25em .5em;
-    text-decoration: none;
-    font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1em;
 }
 
-.button1:hover {
+.buttonBlue:hover {
   background: #3cb0fd;
   background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-  text-decoration: none;
 }
 
 /* WORKFLOW LIST */
@@ -459,7 +509,22 @@ table.tablesorter thead tr .headerSortDown {
     color: black;
     padding: .2em .5em;
     margin: .2em 0;
+    font-family: 'Open Sans Condensed', sans-serif;
     text-align: left;
+}
+
+.opsHead{
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.opsSub{
+    font-size: 1.2em;
+    text-align: center;
+    font-family: 'Open Sans Condensed', sans-serif;
 }
 
 /* WORKFLOW HEADER */
@@ -548,6 +613,7 @@ table.tablesorter thead tr .headerSortDown {
     margin: 0;
     padding: .2em .5em;
     border: 1px solid gray;
+    width: 15%;
 }
 .detData{
     font-size: 1em;
@@ -593,4 +659,37 @@ table.tablesorter thead tr .headerSortDown {
     overflow-x: hidden;
     overflow-y: auto;
     height: 85%;
+}
+
+.scaleText1{
+    font-size: 1.1em;
+}
+
+.scaleText2{
+    font-size: .8em;
+}
+
+.alignRight{
+    text-align: right;
+}
+
+/* EDITING STEPS */
+.dataInputDiv{
+    font-size: 1em;
+    padding: .2em .4em;
+    background-color: #ccc;
+    margin: 0 0 .25em 0;
+}
+
+.dataInputDiv .textTableInput{
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: .1em .5em;;
+    font-size: 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.stepButtons{
+    display: inline;
 }

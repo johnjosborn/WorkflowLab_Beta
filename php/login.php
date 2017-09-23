@@ -51,20 +51,20 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
                     $message = "This account has not been verified.<br><br>
                                 Check your email for the verification link or<br><br>
-                                <button onclick='resendVerification()' class='button1'>Resend verification email.</button>";
+                                <input type='button' onclick='resendVerification()' class='button buttonBlue' value='Resend verification email.' />";
 
                 }
 
             } else {
 
                 $message = "Email / Password combination not found.<br><br>
-                <button onclick='resetPassword()' class='button1' id='resetButton'>Click to Reset Password</button>";
+                <input type='button' onclick='resetPassword()' class='button buttonBlue' id='resetButton' value='Click to Reset Password' />";
             }
 
         } else {
 
         $message = "Email / Password combination not found.<br><br>
-        <button onclick='resetPassword()' class='button1' id='resetButton'>Click to Reset Password</button>";
+        < input type='button' onclick='resetPassword()' class='button buttonBlue' id='resetButton' value='Click to Reset Password' />";
 
         }
         
@@ -86,7 +86,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
         case 1:
 
             $message = "Account not found.<br><br>
-                        <button onclick='resendVerification()' class='button1'>Resend verification email.</button>";
+                        <input type='button' onclick='resendVerification()' class='button buttonBlue' value='Resend verification email.' />";
             break;
 
         case 2:
@@ -99,7 +99,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 
             $message = "We could not verify your email.<br><br>
                         Please try the verification link again or<br><br>
-                        <button onclick='resendVerification()' class='button1'>Resend verification email.</button>";
+                        <input type='button' onclick='resendVerification()' class='button buttonBlue' value='Resend verification email.' />";
 
             break;
 
@@ -167,7 +167,9 @@ echo <<<_FixedHTML
             if (!email){
 
                 $('#email').css("background-color", "#F9F9A7");
-                $("#loginRight").hide().fadeIn("slow").html("Enter the email to to reset the password.<br><br><button onclick='resetPassword()' class='button1' id='resetButton'>Click to Reset Password</button>");
+                $("#loginRight").hide()
+                    .fadeIn("slow")
+                    .html("Enter the email to to reset the password.<br><br><input type='button' onclick='resetPassword()' class='button buttonBlue' id='resetButton' value='Click to Reset Password' />");
 
             } else {
 
@@ -223,7 +225,7 @@ echo <<<_FixedHTML
                         <td><input type="password" name='password' required></td>
                     </tr>
                     <tr>
-                        <td></td><td><input type="submit" value='Log In' class='button1'></td>
+                        <td></td><td><input type="submit" value='Log In' class='button buttonBlue'></td>
                     </tr>
                 </tbody>
             </table>
