@@ -98,6 +98,7 @@ if (isset($_POST['wfl_id'])){
                         <div class='scaleText1 alignRight'>
                             <input type='button' class='button buttonRed editH' onclick='saveWfHeader($wfID)' value='Save' hidden>
                             <input type='button' class='button buttonGray editH' onclick='undoWfHeader($wfID)' value='Undo' hidden>
+                            <input type='button' class='button buttonRed editH' onclick='deleteWf($wfID)' value='DELETE'>
                             <input type='button' class='button buttonBlue editH' onclick='cancelEdit($wfID)' value='Exit Edit Mode'>
                         </div>
                         <input type='hidden' id='wfID' value='$wfID'>

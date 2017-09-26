@@ -91,8 +91,10 @@ $output = "<div class='contentTitle'>
                 </div>
                 <div id='accordionHolder'class='rightDiv scrollable'>
                 <div class='opsHead'>Current Workflow Steps
-                    <div class='right scaleText2'>
-                        <input type='button' class='button buttonBlue' onclick='resetWf()' value='Reset to Beginning'>
+                    <div class='right '>
+                        <input type='button' id='wfBtnReset' class='button buttonBlue scaleText2' onclick='resetWf()' value='Reset to Beginning'>
+                        <input type='button' id='wfBtnSave' class='button buttonRed scaleText2' onclick='saveWf()' value='Save'>
+                        <input type='button' id='wfBtnUndo' class='button buttonGray scaleText2' onclick='getModSteps($wfID)' value='Undo'>
                     </div>
                 </div>
                 

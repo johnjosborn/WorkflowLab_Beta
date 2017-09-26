@@ -249,8 +249,8 @@ echo <<<_FixedHTML
                     wf_id : wfID
                 },
                 success: function (html) {
-                    $("#c1, #c3, #c4").slideUp();
-                    $("#activeControl").html(html).slideDown("slow", function(){
+                    $("#c1, #c3, #c4").hide();
+                    $("#activeControl").html(html).show( function(){
                         $("#activeContent").slideDown("slow");
                     });
                 },
@@ -317,6 +317,7 @@ echo <<<_FixedHTML
                    $("#stepsUpdate").hide().fadeIn("slow").html(html);
                    modAccordian();
                    $('.stepButtons').hide();
+                   $('#wfBtnReset').show();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
@@ -355,16 +356,20 @@ echo <<<_FixedHTML
                 },
                 stop: function (event, ui) {
                     $(ui.item).find(".stepHeader").css("border-bottom", "none");
-                    $('#wfEditButtons').show();
+                    $('#wfBtnReset').hide();
+                    $('#wfBtnSave').show();
+                    $('#wfBtnUndo').show();
                 },
                 change: function( event, ui ) {
-                    $('#wfEditButtons').show();
+                    $('#wfBtnReset').hide();
+                    $('#wfBtnSave').show();
+                    $('#wfBtnUndo').show();
                 }
             });
 
-            //$('#wfEditButtons').hide();
+            $('#wfBtnSave').hide();
+            $('#wfBtnUndo').hide();
             
-
             $('#stepAccordian .stepHeader').bind('click',function(){
                 var self = this;
                 setTimeout(function() {
@@ -400,7 +405,9 @@ echo <<<_FixedHTML
 
             $("#sourceOps").on("click", ".s_panel", function(){
                 $( this ).clone().appendTo( "#stepAccordian" );
-                $('#wfEditButtons').show();
+                $('#wfBtnReset').hide();
+                $('#wfBtnSave').show();
+                $('#wfBtnUndo').show();
             });
         }
 
@@ -481,6 +488,71 @@ echo <<<_FixedHTML
             }); 
         }
 
+        function saveWf(){
+
+            var wfID = document.getElementById("wfID").value
+            
+            var listOrder = $('#stepAccordian').sortable('toArray');
+            
+                $.ajax({
+                    type: 'POST',
+                    url: 'fp/wf_save_order.php',
+                    dataType: 'html',
+                    data: {
+                        wkf_ID: wfID,
+                        stepOrder: listOrder
+                    },
+                    success: function (html) {
+                        //alert(html);
+                        getModSteps(wfID); 
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("error");
+                    }
+                }); 
+        }
+
+        function deleteWf(){
+
+            if (confirm('PERMANENTLY delete this Workflow?')) {
+
+                if (confirm('Confirm Workflow deletion.')) {
+                    
+                    var wfID = document.getElementById("wfID").value
+                    
+                        $.ajax({
+                            type: 'POST',
+                            url: 'fp/wf_delete_wf.php',
+                            dataType: 'html',
+                            data: {
+                                wkf_ID: wfID
+                            },
+                            success: function (html) {
+                                if (html == 1){
+                                    alert("Error deleting workflow.");
+                                } else if (html == 2){
+                                    alert("Error sending data.");
+                                } else if (html == 3){
+                                    alert("Ownership Error.");
+                                } else {
+                                    $.when(updateControls()).then(h1());
+                                    
+                                }
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                                alert("error");
+                            }
+                        });
+
+                } else {
+                    
+                }
+            } else {
+                
+            }
+
+        }
+
         $(document).on("input", "#accordionHolder input.stepInput", function () {
             this.style.backgroundColor = '#FDF19D';
             var buttonDiv = '#stepEditButtons' + $(this).closest('.s_panel').attr('id');
@@ -519,7 +591,6 @@ echo <<<_FixedHTML
                     stp_note: stepNote
                 },
                 success: function (html) {
-                    alert("Step Completed.");
                     if (html == "1"){
                         alert("Workflow Complete.");
                     }
