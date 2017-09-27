@@ -142,7 +142,7 @@ if (isset($_POST['wfl_id'])){
         }
 
         $steps .= " <div id='stepEditButtons$stpID' class='headerItems stepButtons' hidden>
-                        <button class='button buttonRed' onclick='saveEditedStep($stpIDBase)'>Save Changes</button>
+                        <button class='button buttonGreen' onclick='saveEditedStep($stpIDBase)'>Save Changes</button>
                         <button class='button buttonGray' onclick='getModSteps($stpIDBase)'>Undo Changes</button>
                     </div>
                     </div></div>";

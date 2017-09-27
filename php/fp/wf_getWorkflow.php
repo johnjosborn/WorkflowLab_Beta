@@ -98,7 +98,7 @@ if (isset($_POST['wf_id'])){
                                     <textarea id='" . $row['STP_id'] . "note' rows='3'>$stpNotes</textarea>
                                 </div>
                                 <div>
-                                <input type='button' onclick='completeStep(\"" . $row['STP_id'] . "\")' value='Complete Step' class='button buttonBlue'/>
+                                <input type='button' onclick='completeStep(\"" . $row['STP_id'] . "\")' value='Complete Step' class='button buttonGreen'/>
                                 </div>";
                 }
 

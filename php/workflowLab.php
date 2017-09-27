@@ -81,23 +81,48 @@ echo <<<_FixedHTML
 
         function h0(){  
             $("#c1, #c2, #c3, #c4, #activeControl").slideUp();
+            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+            $("#currentSelection").val("h0");
         }
 
         function h1(){  
             $("#c0, #c2, #c3, #c4, #activeControl").slideUp();
             $("#c1").slideToggle("slow");
-            $("#radio-wf-active").css("background", "#3E8553");
-            getWorkflowList("Active");
+            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+            $("#radio-wf-active").css("background", "#E26600");
+            var cur = $("#currentSelection").val();
+
+            if (cur != "h1"){
+                getWorkflowList("Active");
+                $("#currentSelection").val("h1");
+            }
         }
 
         function h3(){  
             $("#c0, #c1, #c2, #c4, #activeControl").slideUp();
             $("#c3").slideToggle("slow");
+            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+            $("#radio-step-active").css("background", "#E26600");
+
+            var cur = $("#currentSelection").val();
+            
+            if (cur != "h3"){
+                getStepList("Active");
+                $("#currentSelection").val("h3");
+            }
+            
         }   
 
         function h4(){  
             $("#c0, #c1, #c2, #c3, #activeControl").slideUp();
             $("#c4").slideToggle("slow");
+            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+
+            var cur = $("#currentSelection").val();
+            
+            if (cur != "h4"){
+                $("#currentSelection").val("h4");
+            }
         }
 
         $("#controlShow").hide();
@@ -109,7 +134,7 @@ echo <<<_FixedHTML
 
         $('body').on('click', '.selectRadio', function() {
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $(this).css("background", "#3E8553");  
+            $(this).css("background", "#E26600");  
         });
     
         $('body').on('click', '#controlHide', function() {
@@ -129,18 +154,18 @@ echo <<<_FixedHTML
         $('body').on('change', '#wfByItem', function() {
             getWorkflowList('Item', this.value);
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-wf-item").css("background", "#3E8553");
+            $("#radio-wf-item").css("background", "#E26600");
         })
 
         $('body').on('change', '#wfByGroup', function() {
             getWorkflowList('Group', this.value);
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-wf-group").css("background", "#3E8553");
+            $("#radio-wf-group").css("background", "#E26600");
         })
 
         $('body').on('focus', '#stringSearchWF', function() {
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-wf-text").css("background", "#3E8553");
+            $("#radio-wf-text").css("background", "#E26600");
         })
 
         function getWorkflowList(searchType, searchTerm){
@@ -413,7 +438,8 @@ echo <<<_FixedHTML
 
         $(document).on("input", "#wfContainer input.textTableInput", function () {
             this.style.backgroundColor = '#FDF19D';
-            $('.editH').show();
+            $('.editH1').show();
+            $('.editH2').hide();
         });
 
         function statusChange(e){
@@ -483,7 +509,7 @@ echo <<<_FixedHTML
                         alert("Error sending data.");
                     } 
                     getModHeader(wkfID);
-                    modAccordian();
+                    //modAccordian();
                 }
             }); 
         }
@@ -553,6 +579,133 @@ echo <<<_FixedHTML
 
         }
 
+        function cancelNewWf(){
+            updateControls();
+        }
+
+        function newWorkflow(){
+
+            getNewHeader();
+            getNewAvailOps();
+            getNewSteps();
+
+            var headerContent = "<div id='activeItem' class='accd_header_active' onclick='hActive()'>New Workflow</div><div id='activeContent' class='accd_content' hidden></div>";
+
+            $("#activeControl").html(headerContent).slideDown();
+            $("#c1, #c2, #c3, #c4").hide();
+            $("#activeContent").slideDown("slow");
+            $(".accd_header").css("background", "linear-gradient( #555, #444)");
+
+        }
+
+        function getNewHeader(){
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_new_header.php',   
+                dataType: 'html',
+                success: function (html) {
+                   $("#activeContent").hide().fadeIn("slow").html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading workflow.");
+                }
+            });
+        }
+
+        function getNewSteps(){
+                
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_new_steps.php',   
+                dataType: 'html',
+                success: function (html) {
+                    $("#stepsUpdate").hide().fadeIn("slow").html(html);
+                    modAccordian();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
+                }
+            });
+        }
+
+        function getNewAvailOps(){
+            
+             $.ajax({
+                 type: 'POST',
+                 url: 'fp/wf_new_ops.php',   
+                 dataType: 'html',
+                 success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    opsSortable();
+                 },
+                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                     $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
+                 }
+             });
+        }
+
+        function saveNewWf(){
+
+            var wkfNum = $('#wfNum').val();
+            var wkfItem = $('#wfItem').val();
+            var wkfDesc = $('#wfDesc').val();
+            var wkfSta = $('#staStore').val();
+            var wkfRef = $('#wfRef').val();
+            var wkfGrp = $('#wfGrp').val();
+            var wkfNot = $('#wfNot').val();
+                        
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_save_newHeader.php',
+                dataType: 'html',
+                data: {
+                    wkf_Num: wkfNum,
+                    wkf_Item: wkfItem,
+                    wkf_Desc: wkfDesc,
+                    wkf_Sta: wkfSta,
+                    wkf_Ref: wkfRef,
+                    wkf_Grp: wkfGrp,
+                    wkf_Not: wkfNot
+                },
+                success: function (html) {
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else {
+                        $('#wfID').val(html);
+                        saveNewWfSteps();   
+                                         
+                    } 
+                }
+            }); 
+
+        }
+
+        function saveNewWfSteps(){
+            
+            var wfID = document.getElementById("wfID").value
+            
+            var listOrder = $('#stepAccordian').sortable('toArray');
+            
+                $.ajax({
+                    type: 'POST',
+                    url: 'fp/wf_save_order.php',
+                    dataType: 'html',
+                    data: {
+                        wkf_ID: wfID,
+                        stepOrder: listOrder
+                    },
+                    success: function (html) {
+                        var g=document.createElement('div');
+                        g.setAttribute("id", wfID);
+                        openWorkflow(g);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("error");
+                    }
+                }); 
+        }
+            
         $(document).on("input", "#accordionHolder input.stepInput", function () {
             this.style.backgroundColor = '#FDF19D';
             var buttonDiv = '#stepEditButtons' + $(this).closest('.s_panel').attr('id');
@@ -642,6 +795,42 @@ echo <<<_FixedHTML
             });
         }
 
+        function getStepList(searchType, searchTerm){
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/step_getList.php',   
+                dataType: 'html',
+                data: {
+                    search_type : searchType,
+                    search_term : searchTerm
+                },
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    $("#stepList").tablesorter();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
+
+        function getStepListString(){
+            var searchString = $("#stringSearchStep").val();
+            getStepList('String', searchString);
+        }
+
+        $('body').on('change', '#stepByType', function() {
+            getStepList('Type', this.value);
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-step-item").css("background", "#E26600");
+        })
+
+        $('body').on('focus', '#stringSearchStep', function() {
+            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
+            $("#radio-step-text").css("background", "#E26600");
+        })
+
         <!--
         function addNewItem() {
 
@@ -661,12 +850,12 @@ echo <<<_FixedHTML
         $('body').on('change', '#itemByItem', function() {
             getItemDetails(this.value);
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-detail").css("background", "#3E8553");
+            $("#radio-itm-detail").css("background", "#E26600");
         })
 
         $('body').on('focus', '#stringSearchItem', function() {
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-text").css("background", "#3E8553");
+            $("#radio-itm-text").css("background", "#E26600");
         })
 
         function saveNewItem(){
@@ -824,7 +1013,7 @@ echo <<<_FixedHTML
         $('body').on('change', '#itemByItem', function() {
             getItemDetails(this.value);
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-detail").css("background", "#3E8553");
+            $("#radio-itm-detail").css("background", "#E26600");
         })
 
         -->

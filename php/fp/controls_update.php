@@ -9,7 +9,6 @@ require_once 'dbConnect.php';
 
 //get list of items for select boxes
 $itemSelect = "<div class='inputControl'><select class='inputField controlSelect' id='wfByItem'><option disabled selected>Select Item</option>";
-$itemSelect2 = "<div class='inputControl'><select class='inputField controlSelect' id='itemByItem'><option disabled selected>Select Item</option>";
 
 $sql = "SELECT DISTINCT WFL_item
         FROM WFL
@@ -60,7 +59,10 @@ if($result){
 
 $groupSelect .= "</select></div>";
 
-$ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
+$ctrlWf = "
+    <div onclick='newWorkflow()' class='selectRadioNew'>+ New Workflow</div>
+    <hr>
+    <div class='listLabel'>WORKFLOWS BY STATUS</div>
     <div id='radio-wf-active' onclick='getWorkflowList(\"Active\")' class='selectRadio'>Active</div>
     <div id='radio-wf-comp' onclick='getWorkflowList(\"Complete\")' class='selectRadio'>Completed</div>
     <div id='radio-wf-pend' onclick='getWorkflowList(\"Pending\")' class='selectRadio'>Pending</div>
@@ -77,6 +79,49 @@ $ctrlWf = "<div class='listLabel'>WORKFLOWS BY STATUS</div>
     <div class='inputControl'>
         <input type='text' id='stringSearchWF' class='inputField2'>
         <input type='button' onclick='getWorkflowListString()' class='button buttonBlue inlineB' value='Search'>
+    </div>";
+
+    //get list of items for select boxes
+$stepTypes = "<div class='inputControl'><select class='inputField controlSelect' id='stepByType'><option disabled selected>Select Type</option>";
+
+$sql = "SELECT DISTINCT OPS_type
+        FROM OPS
+        WHERE OPS_CUS_id = '$custID'
+        ORDER BY OPS_type";
+
+$result = mysqli_query($conn,$sql);
+
+if($result){
+    
+    if($result->num_rows != 0){
+
+        while($row = $result->fetch_assoc()){
+
+            $op = $row['OPS_type'];
+
+            $stepTypes .= "<option value ='$op'>$op</option>";
+        }
+
+    }
+}
+
+$stepTypes .= "</select></div>";
+
+$ctrlStep = "
+    <div onclick='newStep()' class='selectRadioNew'>+ Add New Step</div>
+    <hr>
+    <div class='listLabel'>STEPS BY STATUS</div>
+    <div id='radio-step-active' onclick='getStepList(\"Active\")' class='selectRadio'>Active</div>
+    <div onclick='getStepList(\"Inactive\")' class='selectRadio'>Inactive</div>
+    <div onclick='getStepList(\"%\")' class='selectRadio'>All</div>
+    <hr>
+    <div id='radio-step-item' class='selectRadio'>View by Type</div>
+        $stepTypes
+    <hr>
+    <div id='radio-step-text' class='selectRadio'>Text Search</div>
+    <div class='inputControl'>
+        <input type='text' id='stringSearchStep' class='inputField2'>
+        <input type='button' onclick='getStepListString()' class='button buttonBlue inlineB' value='Search'>
     </div>";
 
 $controls = "
@@ -96,14 +141,15 @@ $controls = "
         Steps
     </div>
     <div class='accd_content' id='c3' hidden>
-        Content 3
+        $ctrlStep
     </div>
     <div class='accd_header'  onclick='h4()'>
         Users
     </div>
     <div class='accd_content' id='c4' hidden>
         Content 4
-    </div>";
+    </div>
+    <input type='hidden' id='currentSelection' value=''>";
 
 echo $controls;
 

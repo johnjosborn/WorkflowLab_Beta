@@ -10,6 +10,7 @@ require_once 'dbConnect.php';
 //DEBUG
 $custID = '1';
 
+$workFlowHeader = "initial";
 
 // Check connection
 if (!$conn) {
@@ -18,6 +19,7 @@ if (!$conn) {
 
 if (isset($_POST['wfl_id'])){
 
+    
     $wfID = $_POST['wfl_id'];
 
     //Query Workflow
@@ -64,54 +66,56 @@ if (isset($_POST['wfl_id'])){
 
                 }
 
-                $statusSelect = "<select id='wfSta' class='textTableInput' onchange='statusChange(this)'>
-                                    <option value='Active' $wfStaA>Active</option>
-                                    <option value='Complete' $wfStaC>Complete</option>
-                                    <option value='Pending' $wfStaP>Pending</option>
-                                    <option value='Cancelled' $wfStaX>Cancelled</option>                
-                                </select>
-                                <input type='hidden' id='staStore' value='$wfSta'>";
-
-                //Workflow header
-                $workFlowHeader = "
-                    <div id='wfContainer' class='container'>
-                        <div class='labelDiv'>Number</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfNum' value='$wfNumber' class='textTableInput'></div>
-                        <div class='labelDiv'>Item</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfItem' value='$wfItem' class='textTableInput'></div>
-                        <div class='labelDiv'>Description</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfDesc' value='$wfDesc' class='textTableInput'></div>
-                        <div class='labelDiv'>Reference</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfRef' value='$wfRef' class='textTableInput'></div>   
-                        <div class='labelDiv'>Group</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfGrp' value='$wfGrp' class='textTableInput'></div>      
-                        <div class='labelDiv'>Notes</div>
-                        <div class='dataInputDiv'>
-                            <input id='wfNot' value='$wfNot' class='textTableInput'></div> 
-                        <div class='labelDiv'>Status</div>
-                        <div class='dataInputDiv'>$statusSelect</div>
-                        <div class='scaleText1 alignRight'>
-                            <input type='button' class='button buttonRed editH' onclick='saveWfHeader($wfID)' value='Save' hidden>
-                            <input type='button' class='button buttonGray editH' onclick='undoWfHeader($wfID)' value='Undo' hidden>
-                            <input type='button' class='button buttonRed editH' onclick='deleteWf($wfID)' value='DELETE'>
-                            <input type='button' class='button buttonBlue editH' onclick='cancelEdit($wfID)' value='Exit Edit Mode'>
-                        </div>
-                        <input type='hidden' id='wfID' value='$wfID'>
-                    </div>
-                    ";
-
             }
+
         }
-    } else { $workFlowHeader = "Bad query"; }
-
-
-        echo $workFlowHeader;
 
 }
+
+    $statusSelect = "<select id='wfSta' class='textTableInput' onchange='statusChange(this)'>
+            <option value='Active' $wfStaA>Active</option>
+            <option value='Complete' $wfStaC>Complete</option>
+            <option value='Pending' $wfStaP>Pending</option>
+            <option value='Cancelled' $wfStaX>Cancelled</option>                
+        </select>
+        <input type='hidden' id='staStore' value='$wfSta'>";
+
+    //Workflow header
+    $workFlowHeader = "
+        <div id='wfContainer' class='container'>
+            <div class='labelDiv'>Number</div>
+            <div class='dataInputDiv'>
+                <input id='wfNum' value='$wfNumber' class='textTableInput'></div>
+            <div class='labelDiv'>Item</div>
+            <div class='dataInputDiv'>
+                <input id='wfItem' value='$wfItem' class='textTableInput'></div>
+            <div class='labelDiv'>Description</div>
+            <div class='dataInputDiv'>
+                <input id='wfDesc' value='$wfDesc' class='textTableInput'></div>
+            <div class='labelDiv'>Reference</div>
+            <div class='dataInputDiv'>
+                <input id='wfRef' value='$wfRef' class='textTableInput'></div>   
+            <div class='labelDiv'>Group</div>
+            <div class='dataInputDiv'>
+                <input id='wfGrp' value='$wfGrp' class='textTableInput'></div>      
+            <div class='labelDiv'>Notes</div>
+            <div class='dataInputDiv'>
+                <input id='wfNot' value='$wfNot' class='textTableInput'></div> 
+            <div class='labelDiv'>Status</div>
+            <div class='dataInputDiv'>$statusSelect</div>
+            <div class='scaleText1 alignRight'>
+                <input type='button' class='button buttonGreen editH1' onclick='saveWfHeader($wfID)' value='Save' hidden>
+                <input type='button' class='button buttonGray editH1' onclick='getModHeader($wfID)' value='Undo' hidden>
+                <input type='button' id='wfBtnReset' class='button buttonBlue editH2' onclick='resetWf()' value='Reset to Beginning'>
+                <input type='button' class='button buttonRed editH2' onclick='deleteWf($wfID)' value='DELETE'>
+                <input type='button' class='button buttonBlue editH2' onclick='cancelEdit($wfID)' value='Exit Edit Mode'>
+            </div>
+            <input type='hidden' id='wfID' value='$wfID'>
+        </div>
+        ";
+
+    echo $workFlowHeader;
+
+} else { $workFlowHeader = "Bad query"; }
 
 ?>

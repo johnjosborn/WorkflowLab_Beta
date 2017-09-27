@@ -151,7 +151,7 @@ textarea{
     cursor: pointer;
     padding: .75em;
     font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 .listTable td{
@@ -256,10 +256,9 @@ table.tablesorter thead tr .headerSortDown {
     margin: .2em 0;
     padding: .2em 0 .2em 1em;
     background: linear-gradient( #555, #444);
-    border: none;
     border-radius: 2px;
     color: #fff;
-    font-size: 1.25em;
+    font-size: 1.1em;
 }
 
 .accd_header_selected{
@@ -273,14 +272,19 @@ table.tablesorter thead tr .headerSortDown {
     border: none;
     border-radius: 2px;
     color: #fff;
-    font-size: 1.25em;
+    font-size: 1.1em;
+}
+
+.ui-state-default{
+    border: 1px solid #999;
 }
 
 .temp{
-    color: #3E8553;
+    color: #E26600;
 }
 .accd_content{
     background: none;
+    padding: .25em 0 0 0;
 }
 
 #accd_contentNull{
@@ -303,9 +307,21 @@ table.tablesorter thead tr .headerSortDown {
     margin: .2em .5em 0 auto;
     padding: .2em 0 .2em 1em;
     font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1.15em;
+    font-size: 1em;
     border-radius: 2px;
     background: linear-gradient( #333, #444);
+    border: none;
+    color: #fff;
+}
+
+.selectRadioNew{
+    width: 80%;
+    margin: .2em .5em 0 auto;
+    padding: .2em 0 .2em 1em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 1em;
+    border-radius: 2px;
+    background: linear-gradient( #00BB06, #00A000);
     border: none;
     color: #fff;
 }
@@ -339,30 +355,24 @@ table.tablesorter thead tr .headerSortDown {
 
 /* BUTTON STYLING */
 
-.button{
-    margin: .5em 1em;
+.button, .ui-widget input{
+    margin: .5em .5em;
+    padding: .25em .5em;
     -webkit-border-radius: 6;
     -moz-border-radius: 6;
     border-radius: 3px;
-    font-size: 1em;
-    padding: .25em .5em;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: .9em;
     text-decoration: none;
 }
 
 .buttonGray{
-    margin: .5em 1em;
     background: #575757;
     background-image: -webkit-linear-gradient(top, #747474, #575757 );
     background-image: -moz-linear-gradient(top, #747474, #575757 );
     background-image: -ms-linear-gradient(top, #747474, #575757 );
     background-image: -o-linear-gradient(top, #747474, #575757 );
     background-image: linear-gradient(to bottom, #747474, #575757 );
-    -webkit-border-radius: 6;
-    -moz-border-radius: 6;
-    border-radius: 3px;
-    color: #ffffff;
-    font-size: 1em;
-    padding: .25em .5em;
     text-decoration: none;
 }
 
@@ -413,6 +423,25 @@ table.tablesorter thead tr .headerSortDown {
   background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+}
+
+.buttonGreen{
+    background: #21773D;
+    background-image: -webkit-linear-gradient(top, #21773D, #2DA051);
+    background-image: -moz-linear-gradient(top,  #21773D, #2DA051);
+    background-image: -ms-linear-gradient(top,  #21773D, #2DA051);
+    background-image: -o-linear-gradient(top,  #21773D, #2DA051);
+    background-image: linear-gradient(to bottom,  #21773D, #2DA051);
+    color: #ffffff;
+}
+
+.buttonGreen:hover {
+  background: #2DA051;
+  background-image: -webkit-linear-gradient(top, #2DA051, #36BD5E);
+  background-image: -moz-linear-gradient(top, #2DA051, #36BD5E);
+  background-image: -ms-linear-gradient(top, #2DA051, #36BD5E);
+  background-image: -o-linear-gradient(top, #2DA051, #36BD5E);
+  background-image: linear-gradient(to bottom, #2DA051, #36BD5E);
 }
 
 /* WORKFLOW LIST */
@@ -475,8 +504,6 @@ table.tablesorter thead tr .headerSortDown {
      color: black;   
  }
 
-
-
 /* WORKFLOW ACCORDIAN DISPLAY */
 #stepAccordian{
     padding: .2em;
@@ -487,6 +514,10 @@ table.tablesorter thead tr .headerSortDown {
 .ui-accordion .ui-accordion-content{
     padding: .5em;
     border-radius: 0 0 5px 5px;
+}
+
+.ui-accordion .ui-accordion-header{
+    padding: .25em .5em .25em .7em;
 }
 
 .ui-accordion-header-active{
@@ -553,8 +584,7 @@ table.tablesorter thead tr .headerSortDown {
     margin: .2em 0 0 auto;
     padding: .1em .2em .1em 1em;
     font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1em;
-    font-weight: bold;
+    font-size: .9em;
     text-align: center;
     border-radius: 3px 3px 0 0;
     background: linear-gradient( #333, #444);
@@ -563,11 +593,10 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 .dataDiv{
-    width: 80%;
     margin: 0 0 0 auto;
-    padding: .2em .2em .2em 1em;
+    padding: 0 .2em 0 1em;
     font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 1.15em;
+    font-size: 1em;
     border-radius: 2px 0 2px 2px;
     background: none;
     border: 1px solid #666;
@@ -662,7 +691,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 .scaleText1{
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .scaleText2{

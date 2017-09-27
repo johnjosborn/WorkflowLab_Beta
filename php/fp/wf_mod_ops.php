@@ -58,32 +58,28 @@ if (isset($_POST['wfl_id'])){
     $ops = "Bad query for available ops.";
     }
 
-}
 
-//Query Workflow
-$sql = "SELECT WFL_id, WFL_item, WFL_num, WFL_desc, WFL_status, WFL_ref, WFL_group
-FROM WFL
-WHERE WFL_CUS_id = '$custID' AND WFL_id = '$wfID'";
-    
-$result = mysqli_query($conn,$sql);
+    //Query Workflow
+    $sql = "SELECT WFL_id, WFL_item, WFL_num, WFL_desc, WFL_status, WFL_ref, WFL_group
+    FROM WFL
+    WHERE WFL_CUS_id = '$custID' AND WFL_id = '$wfID'";
+        
+    $result = mysqli_query($conn,$sql);
 
-if($result){
+    if($result){
 
-    if($result->num_rows != 0){
+        if($result->num_rows != 0){
 
-        while($row = $result->fetch_assoc()){
+            while($row = $result->fetch_assoc()){
 
-            $wfNumber = $row['WFL_num'];
-            $wfItem = $row['WFL_item'];
-            $wfDesc = $row['WFL_desc']; 
-            $wfStatus = $row['WFL_status']; 
+                $wfNumber = "Modify Workflow " . $row['WFL_num'];
 
+            }
         }
-    }
-} 
+    } 
 
 $output = "<div class='contentTitle'>
-                Modify Workflow $wfNumber
+                $wfNumber
             </div>
             <div class='contentHolder'>
                 <div id='workflowHeader' class='leftDiv'>
@@ -92,8 +88,7 @@ $output = "<div class='contentTitle'>
                 <div id='accordionHolder'class='rightDiv scrollable'>
                 <div class='opsHead'>Current Workflow Steps
                     <div class='right '>
-                        <input type='button' id='wfBtnReset' class='button buttonBlue scaleText2' onclick='resetWf()' value='Reset to Beginning'>
-                        <input type='button' id='wfBtnSave' class='button buttonRed scaleText2' onclick='saveWf()' value='Save'>
+                        <input type='button' id='wfBtnSave' class='button buttonGreen scaleText2' onclick='saveWf()' value='Save'>
                         <input type='button' id='wfBtnUndo' class='button buttonGray scaleText2' onclick='getModSteps($wfID)' value='Undo'>
                     </div>
                 </div>
@@ -106,7 +101,9 @@ $output = "<div class='contentTitle'>
             </div>
             ";
 
-
+} else {
+    $output = "Error posting data";
+}
 echo $output;
 
 ?>
