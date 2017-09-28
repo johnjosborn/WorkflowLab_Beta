@@ -108,32 +108,32 @@ if (isset($_POST['wfl_id'])){
                     <div class='orderBox'>$stpOrder</div>
                     <div class='titleBox'>$stpTitle</div>
                 </div>
-            <div class='stepDetail'>
-                <div class='labelDiv'>Title</div>
-                <div class='dataInputDiv'>
-                    <input id='stpTitle$stpIDBase' value='$stpTitle' class='textTableInput stepInput'>
-                </div>
-                <div class='labelDiv'>Description</div>
-                <div class='dataInputDiv'>
-                    <input id='stpDesc$stpIDBase' value='$stpDesc' class='textTableInput stepInput'>
-                </div>
-                <div class='labelDiv'>Details</div>
-                <div class='dataInputDiv'>
-                    <input id='stpDetail$stpIDBase' value='$stpDetails' class='textTableInput stepInput'>
-                </div>
-                <div class='labelDiv'>Notes</div>
-                <div class='dataInputDiv'>
-                    <input id='stpNotes$stpIDBase' value='$stpNotes' class='textTableInput stepInput'>
-                </div>
-                <div class='labelDiv'>Completed By:</div>
-                <div class='dataInputDiv'>
-                    $users   
-                    <input type='hidden' id='userStore$stpIDBase' value='$stpUsr'>
-                </div>
-                <div class='labelDiv'>Completed Date:</div>
-                <div class='dataInputDiv'>
-                    <input type='text' id='stpDate$stpIDBase' value='$stpDate' class='datePicker textTableInput stepInput'>
-                </div>";
+                <div class='stepDetail'>
+                    <div class='labelDiv'>Title</div>
+                    <div class='dataInputDiv'>
+                        <input id='stpTitle$stpIDBase' value='$stpTitle' class='textTableInput stepInput'>
+                    </div>
+                    <div class='labelDiv'>Description</div>
+                    <div class='dataInputDiv'>
+                        <input id='stpDesc$stpIDBase' value='$stpDesc' class='textTableInput stepInput'>
+                    </div>
+                    <div class='labelDiv'>Details</div>
+                    <div class='dataInputDiv'>
+                        <input id='stpDetail$stpIDBase' value='$stpDetails' class='textTableInput stepInput'>
+                    </div>
+                    <div class='labelDiv'>Notes</div>
+                    <div class='dataInputDiv'>
+                        <input id='stpNotes$stpIDBase' value='$stpNotes' class='textTableInput stepInput'>
+                    </div>
+                    <div class='labelDiv'>Completed By:</div>
+                    <div class='dataInputDiv'>
+                        $users   
+                        <input type='hidden' id='userStore$stpIDBase' value='$stpUsr'>
+                    </div>
+                    <div class='labelDiv'>Completed Date:</div>
+                    <div class='dataInputDiv'>
+                        <input type='text' id='stpDate$stpIDBase' value='$stpDate' class='datePicker textTableInput stepInput'>
+                    </div>";
 
         if ($thisStatus == "Complete"){
 
@@ -151,7 +151,7 @@ if (isset($_POST['wfl_id'])){
 
     }
 
-    $steps .= "</div></div>";
+    $steps .= "";
 
     } else { $steps = "Bad query"; }
 

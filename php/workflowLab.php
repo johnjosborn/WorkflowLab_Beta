@@ -3,10 +3,8 @@
 //initiate the session (must be the first statement in the document)
 session_start();
 
-$pageTitle = 'Workflow Control Center';
-
-            // <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            // <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+// <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+// <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
             
 echo <<<_FixedHTML
@@ -22,9 +20,10 @@ echo <<<_FixedHTML
     <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="../css/workflowLab.css">
 
+    
     <script src="../js/jquery.js"></script>
-    <script src="../js/jquery.tablesorter.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
+    <script src="../js/jquery.tablesorter.js"></script>
     
     
     <title>Work Flow Lab</title>
@@ -88,11 +87,11 @@ echo <<<_FixedHTML
         function h1(){  
             $("#c0, #c2, #c3, #c4, #activeControl").slideUp();
             $("#c1").slideToggle("slow");
-            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
-            $("#radio-wf-active").css("background", "#E26600");
             var cur = $("#currentSelection").val();
-
+            
             if (cur != "h1"){
+                $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+                $("#radio-wf-active").css("background", "#E26600");
                 getWorkflowList("Active");
                 $("#currentSelection").val("h1");
             }
@@ -101,13 +100,13 @@ echo <<<_FixedHTML
         function h3(){  
             $("#c0, #c1, #c2, #c4, #activeControl").slideUp();
             $("#c3").slideToggle("slow");
-            $(".selectRadio").css("background", "linear-gradient( #444, #333)");
-            $("#radio-step-active").css("background", "#E26600");
-
+            
             var cur = $("#currentSelection").val();
             
             if (cur != "h3"){
-                getStepList("Active");
+                $(".selectRadio").css("background", "linear-gradient( #444, #333)");
+                $("#radio-op-active").css("background", "#E26600");
+                getOpList("Active");
                 $("#currentSelection").val("h3");
             }
             
@@ -181,6 +180,7 @@ echo <<<_FixedHTML
                 success: function (html) {
                     $("#contentUpdate").hide().fadeIn("slow").html(html);
                     $("#wfList").tablesorter();
+                    $('#wfSelection').val(searchType);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
@@ -191,6 +191,52 @@ echo <<<_FixedHTML
         function getWorkflowListString(){
             var searchString = $("#stringSearchWF").val();
             getWorkflowList('String', searchString);
+        }
+
+        function updateWfList(){
+            
+            var wfList = $('#wfSelection').val();
+
+            switch(wfList){
+                case "Active":
+                    getWorkflowList("Active")
+                    break;
+
+                case "Complete":
+                    getWorkflowList("Complete")
+                    break;
+
+                case "Pending":
+                    getWorkflowList("Pending")
+                    break;
+
+                case "Template":
+                    getWorkflowList("Template")
+                    break;
+
+                case "String":
+                    getWorkflowListString()
+                    break;
+
+                case "All":
+                    getOpList("%")
+                    break;
+
+                case "Item":
+                    var typeVal = $('#wfByItem').val();
+                    getOpList('Item', typeVal);
+                    break;
+                
+                case "Group":
+                    var typeVal = $('#wfByGroup').val();
+                    getOpList('Group', typeVal);
+                    break;
+
+                default:
+                    getOpList("%")
+                    break;
+            }
+
         }
 
         function openWorkflow(wfl){
@@ -234,7 +280,7 @@ echo <<<_FixedHTML
                                 setTimeout(function() {
                                     theOffset = $(self).position();
                                     theNextOffset = $('#stepAccordian').position();
-                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1000);
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 50}, 1000);
                                 }, 510); // ensure the collapse animation is done
                             });
 
@@ -243,8 +289,8 @@ echo <<<_FixedHTML
                                 setTimeout(function() {
                                     theOffset = $(self).position();
                                     theNextOffset = $('#stepAccordian').position();
-                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1500);
-                                }, 10); // ensure the collapse animation is done
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 50}, 1500);
+                                }, 510); // ensure the collapse animation is done
                             });
 
 
@@ -255,6 +301,7 @@ echo <<<_FixedHTML
                             });
 
                             getWFHeader(wfID);
+                            $("#currentSelection").val("wf");
                         }
                     });
                 },
@@ -339,7 +386,7 @@ echo <<<_FixedHTML
                    wfl_id : wfID
                 },
                 success: function (html) {
-                   $("#stepsUpdate").hide().fadeIn("slow").html(html);
+                   $("#accordianScroll").hide().fadeIn("slow").html(html);
                    modAccordian();
                    $('.stepButtons').hide();
                    $('#wfBtnReset').show();
@@ -436,6 +483,29 @@ echo <<<_FixedHTML
             });
         }
 
+        $('body').on('change', '#filterOps', function() {
+            filterOps(this.value);
+        })
+
+        function filterOps(filterString){
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_op_filter.php',   
+                dataType: 'html',
+                data: {
+                   filter : filterString
+                },
+                success: function (html) {
+                   $("#sourceOps").hide().fadeIn("slow").html(html);
+                   modAccordian();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading available ops.");
+                }
+            });
+        }
+
         $(document).on("input", "#wfContainer input.textTableInput", function () {
             this.style.backgroundColor = '#FDF19D';
             $('.editH1').show();
@@ -446,7 +516,8 @@ echo <<<_FixedHTML
             var thisStatus = e.options[e.selectedIndex].value;
             $('#staStore').val(thisStatus);
             e.style.backgroundColor = '#FDF19D';
-            $('.editH').show();
+            $('.editH1').show();
+            $('.editH2').hide();
         }
 
         function cancelEdit(wfID){
@@ -509,7 +580,6 @@ echo <<<_FixedHTML
                         alert("Error sending data.");
                     } 
                     getModHeader(wkfID);
-                    //modAccordian();
                 }
             }); 
         }
@@ -526,7 +596,8 @@ echo <<<_FixedHTML
                     dataType: 'html',
                     data: {
                         wkf_ID: wfID,
-                        stepOrder: listOrder
+                        stepOrder: listOrder,
+                        verify: '1'
                     },
                     success: function (html) {
                         //alert(html);
@@ -561,7 +632,8 @@ echo <<<_FixedHTML
                                 } else if (html == 3){
                                     alert("Ownership Error.");
                                 } else {
-                                    $.when(updateControls()).then(h1());
+                                    updateWfList();
+                                    h1();
                                     
                                 }
                             },
@@ -583,18 +655,166 @@ echo <<<_FixedHTML
             updateControls();
         }
 
-        function newWorkflow(){
+        function fromScratch(){
 
             getNewHeader();
             getNewAvailOps();
             getNewSteps();
-
+    
             var headerContent = "<div id='activeItem' class='accd_header_active' onclick='hActive()'>New Workflow</div><div id='activeContent' class='accd_content' hidden></div>";
-
+    
             $("#activeControl").html(headerContent).slideDown();
             $("#c1, #c2, #c3, #c4").hide();
             $("#activeContent").slideDown("slow");
             $(".accd_header").css("background", "linear-gradient( #555, #444)");
+        }
+
+        function fromExistWf(){
+            var wfID = $("#newFromExist").val();
+            fromExisting(wfID);
+        }
+
+        function fromExistTemp(){
+            var wfID = $("#newFromTemp").val();
+            fromExisting(wfID);
+        }
+
+        function fromExisting(wfID){
+            existHeader(wfID);
+            existSteps(wfID);
+        }
+
+        function existHeader(wfID){
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_new_exist_header.php',   
+                dataType: 'html',
+                data: {
+                    wfl_id : wfID
+                },
+                success: function (html) {
+                    $("#activeContent").hide().fadeIn("slow").html(html);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading workflow.");
+                }
+            });
+        }
+
+        function existSteps(wfID){
+            
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_new_exist_steps.php',   
+                dataType: 'html',
+                data: {
+                    wf_id : wfID
+                },
+                success: function (html) {
+                    $("#contentUpdate").hide().fadeIn("slow").html(html);  
+                    
+                        $( "#stepAccordian" ).accordion({
+                            active: false,
+                            collapsible: true,
+                            header: ".stepHeader",
+                            heightStyle: "content",
+                            animate: 500
+                        });
+
+                        $('#stepAccordian .stepHeader').bind('click',function(){
+                            var self = this;
+                            setTimeout(function() {
+                                theOffset = $(self).position();
+                                theNextOffset = $('#stepAccordian').position();
+                                $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1000);
+                            }, 510); // ensure the collapse animation is done
+                        });
+
+                       $("#currentSelection").val("wf");
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                }
+            });
+        }
+
+        function saveNewExisting(){
+
+            saveNewExistHeader();
+
+        }
+
+        function saveNewExistHeader(){
+            
+            var wkfNum = $('#wfNum').val();
+            var wkfItem = $('#wfItem').val();
+            var wkfDesc = $('#wfDesc').val();
+            var wkfSta = $('#staStore').val();
+            var wkfRef = $('#wfRef').val();
+            var wkfGrp = $('#wfGrp').val();
+            var wkfNot = $('#wfNot').val();
+                        
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_save_newHeader.php',
+                dataType: 'html',
+                data: {
+                    wkf_Num: wkfNum,
+                    wkf_Item: wkfItem,
+                    wkf_Desc: wkfDesc,
+                    wkf_Sta: wkfSta,
+                    wkf_Ref: wkfRef,
+                    wkf_Grp: wkfGrp,
+                    wkf_Not: wkfNot
+                },
+                success: function (html) {
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else {
+                        saveExistingSteps(html);
+                    } 
+                }
+            });
+        }
+
+        function saveExistingSteps(wfID){
+    
+            var exID = document.getElementById("wfExID").value
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_save_new_exist_steps.php',
+                dataType: 'html',
+                data: {
+                    wkf_ID: wfID,
+                    ex_ID: exID
+                },
+                success: function (html) {
+                    var g=document.createElement('div');
+                    g.setAttribute("id", wfID);
+                    openWorkflow(g);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    alert("error");
+                }
+            }); 
+
+        }
+
+        function newWorkflow(){
+            $.ajax({
+                type: 'POST',
+                url: 'fp/wf_new_options.php',   
+                dataType: 'html',
+                success: function (html) {
+                    $("#c1, #c2, #c3, #c4").hide();
+                   $("#activeControl").html(html).slideDown();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading workflow.");
+                }
+            });
 
         }
 
@@ -647,6 +867,11 @@ echo <<<_FixedHTML
 
         function saveNewWf(){
 
+            saveNewHeader();
+        }
+
+        function saveNewHeader(){
+
             var wkfNum = $('#wfNum').val();
             var wkfItem = $('#wfItem').val();
             var wkfDesc = $('#wfDesc').val();
@@ -672,18 +897,13 @@ echo <<<_FixedHTML
                     if (html == 1){
                         alert("Error updating data.");
                     } else {
-                        $('#wfID').val(html);
-                        saveNewWfSteps();   
-                                         
+                        saveNewWfSteps(html);
                     } 
                 }
-            }); 
-
+            });
         }
 
-        function saveNewWfSteps(){
-            
-            var wfID = document.getElementById("wfID").value
+        function saveNewWfSteps(wfID){
             
             var listOrder = $('#stepAccordian').sortable('toArray');
             
@@ -693,7 +913,8 @@ echo <<<_FixedHTML
                     dataType: 'html',
                     data: {
                         wkf_ID: wfID,
-                        stepOrder: listOrder
+                        stepOrder: listOrder,
+                        verify: 1
                     },
                     success: function (html) {
                         var g=document.createElement('div');
@@ -795,11 +1016,11 @@ echo <<<_FixedHTML
             });
         }
 
-        function getStepList(searchType, searchTerm){
+        function getOpList(searchType, searchTerm){
             
             $.ajax({
                 type: 'POST',
-                url: 'fp/step_getList.php',   
+                url: 'fp/op_getList.php',   
                 dataType: 'html',
                 data: {
                     search_type : searchType,
@@ -807,7 +1028,8 @@ echo <<<_FixedHTML
                 },
                 success: function (html) {
                     $("#contentUpdate").hide().fadeIn("slow").html(html);
-                    $("#stepList").tablesorter();
+                    $("#opList").tablesorter();
+                    $('#stepSelection').val(searchType);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
                     $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
@@ -815,208 +1037,217 @@ echo <<<_FixedHTML
             });
         }
 
-        function getStepListString(){
-            var searchString = $("#stringSearchStep").val();
-            getStepList('String', searchString);
+        function getOpListString(){
+            var searchString = $("#stringSearchOp").val();
+            getOpList('String', searchString);
+            $('#stepSelection').val('String');
         }
 
-        $('body').on('change', '#stepByType', function() {
-            getStepList('Type', this.value);
+        $('body').on('change', '#opByType', function() {
+            getOpList('Type', this.value);
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-step-item").css("background", "#E26600");
+            $("#radio-op-item").css("background", "#E26600");
+            $('#stepSelection').val('String');
         })
 
-        $('body').on('focus', '#stringSearchStep', function() {
+        $('body').on('focus', '#stringSearchOp', function() {
             $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-step-text").css("background", "#E26600");
+            $("#radio-op-text").css("background", "#E26600");
         })
 
-        <!--
-        function addNewItem() {
+        function newOp(){
 
             $.ajax({
                 type: 'POST',
-                url: 'fp/item_new.php',   
+                url: 'fp/op_new.php',   
                 dataType: 'html',
                 success: function (html) {
-                    $("#contentUpdate").hide().fadeIn("slow").html(html);
+                    $("#activeControl").show().html(html);
+                    hActive();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading step details.");
                 }
             });
         }
 
-        $('body').on('change', '#itemByItem', function() {
-            getItemDetails(this.value);
-            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-detail").css("background", "#E26600");
-        })
+        function editOp(opID){
 
-        $('body').on('focus', '#stringSearchItem', function() {
-            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-text").css("background", "#E26600");
-        })
+            $.ajax({
+                type: 'POST',
+                url: 'fp/op_mod_detail.php',   
+                dataType: 'html',
+                data: {
+                   op_id : opID
+                },
+                success: function (html) {
+                    //$("#activeControl").hide().slideToggle("slow").html(html);
+                    $("#activeControl").show().html(html);
+                    hActive();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading step details.");
+                }
+            });
+        }
 
-        function saveNewItem(){
-            var itemNum = $("#item_num").val();
-            var itemDesc = $("#item_desc").val();
-            var itemStatus = $("#item_sta").val();
-            var itemWf = $("#item_wf").val();
+        $(document).on("input", "#opContainer input.textTableInput", function () {
+            this.style.backgroundColor = '#FDF19D';
+            $('.editH1').show();
+            $('.editH2').hide();
+        });
 
-            itemNum = itemNum.trim();
+        function opStatusChange(e){
+            var thisStatus = e.options[e.selectedIndex].value;
+            $('#opStaStore').val(thisStatus);
+            e.style.backgroundColor = '#FDF19D';
+            $('.editH1').show();
+            $('.editH2').hide();
+        }
 
-            if (itemNum){
+        function saveOpDetail(opID){
 
-                $.ajax({
-                    type: 'POST',
-                    url: 'fp/item_save.php',   
-                    dataType: 'html',
-                    data: {
-                        item_num: itemNum,
-                        item_desc: itemDesc,
-                        item_sta: itemStatus,
-                        item_wf: itemWf
-                    },
-                    success: function (html) {
-                        updateControls();
-                        $("#contentUpdate").hide().fadeIn("slow").html(html);
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                        $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+            var opTitle = $('#opTitle').val();
+            var opDesc = $('#opDesc').val();
+            var opDetail = $('#opDetail').val();
+            var opType = $('#opType').val();
+            var opSta = $('#opStaStore').val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'fp/op_save_detail.php',   
+                dataType: 'html',
+                data: {
+                   op_id : opID,
+                   op_title : opTitle,
+                   op_desc : opDesc,
+                   op_detail : opDetail,
+                   op_type : opType,
+                   op_sta : opSta
+                },
+                success: function (html) {
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else if (html == 2){
+                        alert("Error sending data.");
                     }
-                });
+                    editOp(opID);
+                    updateOpList();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading step details.");
+                }
+            });
+        }
 
-            } else {
+        function updateOpList(){
+            
+            var opList = $('#stepSelection').val();
 
-                alert("item number is required");
+            switch(opList){
+                case "Active":
+                    getOpList("Active")
+                    break;
+
+                case "Inactive":
+                    getOpList("Inactive")
+                    break;
+
+                case "String":
+                    getOpListString()
+                    break;
+
+                case "All":
+                    getOpList("%")
+                    break;
+
+                case "Type":
+                    var typeVal = $('#opByType').val();
+                    getOpList('Type', typeVal);
+                    break;
+                
+                default:
+                    getOpList("%")
+                    break;
             }
 
-
         }
 
-        function clearNewItem(){
-            $("#item_num").val("");
-            $("#item_desc").val("");
-            $("#item_sta").val("Active");
-            $("#item_wf").val("0");
-        }
-
-        function getItemList(searchType){
+        function saveNewOp(){
+            
+            var opTitle = $('#opTitle').val();
+            var opDesc = $('#opDesc').val();
+            var opDetail = $('#opDetail').val();
+            var opType = $('#opType').val();
+            var opSta = $('#opStaStore').val();
 
             $.ajax({
                 type: 'POST',
-                url: 'fp/item_getList.php',   
+                url: 'fp/op_save_new.php',   
                 dataType: 'html',
                 data: {
-                    search_type : searchType
+                   op_title : opTitle,
+                   op_desc : opDesc,
+                   op_detail : opDetail,
+                   op_type : opType,
+                   op_sta : opSta
                 },
                 success: function (html) {
-                    $("#contentUpdate").hide().fadeIn("slow").html(html);
-                    $("#itemList").tablesorter();
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
-                }
-            });
-        }
-
-        function getItemListString(){
-
-            
-            var textString = $("#stringSearchItem").val();
-
-            alert(textString);
-            
-            $.ajax({
-                type: 'POST',
-                url: 'fp/item_getList.php',   
-                dataType: 'html',
-                data: {
-                    search_type : 'String',
-                    search_term : textString
-                },
-                success: function (html) {
-                    $("#contentUpdate").hide().fadeIn("slow").html(html);
-                    $("#itemList").tablesorter();
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
-                }
-            });
-        }
-
-        function getItemDetails(itemID){
-            
-            $.ajax({
-                type: 'POST',
-                url: 'fp/item_details.php',   
-                dataType: 'html',
-                data: {
-                    item_id : itemID
-                },
-                success: function (html) {
-                    $("#contentUpdate").hide().fadeIn("slow").html(html);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
-                }
-            });
-        }
-
-        function editChangeItem(){
-            $("#btnEditItemChg").hide();
-            $("#btnSaveItemChg").fadeIn();
-            $("#btnUndoItemChg").fadeIn();
-            $('.itemEdit').prop('readonly', false);
-            $('.itemEditSelect').prop('disabled', false);
-        }
-
-        function saveChangeItem(itemID){
-            var itemNum = $("#item_num").val();
-            var itemDesc = $("#item_desc").val();
-            var itemStatus = $("#item_sta").val();
-            var itemWf = $("#item_wf").val();
-
-            itemNum = itemNum.trim();
-
-            if (itemNum){
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'fp/item_change.php',   
-                    dataType: 'html',
-                    data: {
-                        item_id: itemID,
-                        item_num: itemNum,
-                        item_desc: itemDesc,
-                        item_sta: itemStatus,
-                        item_wf: itemWf
-                    },
-                    success: function (html) {
-                        updateControls();
-                        getItemDetails(itemID)
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                        $("#contentUpdate").hide().fadeIn("slow").html("error loading new item form.");
+                    if (html == 1){
+                        alert("Error updating data.");
+                    } else if (html == 2){
+                        alert("Error sending data.");
+                    } else {
+                        $('#stepSelection').val(opSta);
+                        editOp(html);
+                        updateOpList();
                     }
-                });
-
-            } else {
-
-                alert("item number is required");
-            }
-
-
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $("#contentUpdate").hide().fadeIn("slow").html("error loading step details.");
+                }
+            });
         }
 
-        $('body').on('change', '#itemByItem', function() {
-            getItemDetails(this.value);
-            $(".selectRadio").css("background", "linear-gradient( #333, #444)");  
-            $("#radio-itm-detail").css("background", "#E26600");
-        })
+        function deleteOp(){
 
-        -->
+            if (confirm('PERMANENTLY delete this Step?')) {
+                
+                                if (confirm('Confirm Step deletion.')) {
+                                    
+                                    var opID = document.getElementById("opID").value
+                                    
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'fp/op_delete.php',
+                                            dataType: 'html',
+                                            data: {
+                                                op_ID: opID
+                                            },
+                                            success: function (html) {
+                                                if (html == 1){
+                                                    alert("Error deleting workflow.");
+                                                } else if (html == 2){
+                                                    alert("Error sending data.");
+                                                } else if (html == 3){
+                                                    alert("Ownership Error.");
+                                                } else {
+                                                    updateOpList(); 
+                                                    h3();                                                  
+                                                }
+                                            },
+                                            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                                                alert("error");
+                                            }
+                                        });
+                
+                                } else {
+                                    
+                                }
+                            } else {
+                                
+                            }
+        }
 
     </script>
 </body>

@@ -79,10 +79,11 @@ $ctrlWf = "
     <div class='inputControl'>
         <input type='text' id='stringSearchWF' class='inputField2'>
         <input type='button' onclick='getWorkflowListString()' class='button buttonBlue inlineB' value='Search'>
+        <input type='hidden' id='wfSelection' value='Active'>
     </div>";
 
     //get list of items for select boxes
-$stepTypes = "<div class='inputControl'><select class='inputField controlSelect' id='stepByType'><option disabled selected>Select Type</option>";
+$stepTypes = "<div class='inputControl'><select class='inputField controlSelect' id='opByType'><option disabled selected>Select Type</option>";
 
 $sql = "SELECT DISTINCT OPS_type
         FROM OPS
@@ -108,20 +109,21 @@ if($result){
 $stepTypes .= "</select></div>";
 
 $ctrlStep = "
-    <div onclick='newStep()' class='selectRadioNew'>+ Add New Step</div>
+    <div onclick='newOp()' class='selectRadioNew'>+ Add New Step</div>
     <hr>
     <div class='listLabel'>STEPS BY STATUS</div>
-    <div id='radio-step-active' onclick='getStepList(\"Active\")' class='selectRadio'>Active</div>
-    <div onclick='getStepList(\"Inactive\")' class='selectRadio'>Inactive</div>
-    <div onclick='getStepList(\"%\")' class='selectRadio'>All</div>
+    <div id='radio-op-active' onclick='getOpList(\"Active\")' class='selectRadio'>Active</div>
+    <div onclick='getOpList(\"Inactive\")' class='selectRadio'>Inactive</div>
+    <div onclick='getOpList(\"%\")' class='selectRadio'>All</div>
     <hr>
-    <div id='radio-step-item' class='selectRadio'>View by Type</div>
+    <div id='radio-op-item' class='selectRadio'>View by Type</div>
         $stepTypes
     <hr>
-    <div id='radio-step-text' class='selectRadio'>Text Search</div>
+    <div id='radio-op-text' class='selectRadio'>Text Search</div>
     <div class='inputControl'>
-        <input type='text' id='stringSearchStep' class='inputField2'>
-        <input type='button' onclick='getStepListString()' class='button buttonBlue inlineB' value='Search'>
+        <input type='text' id='stringSearchOp' class='inputField2'>
+        <input type='button' onclick='getOpListString()' class='button buttonBlue inlineB' value='Search'>
+        <input type='hidden' id='stepSelection' value='Active'>
     </div>";
 
 $controls = "

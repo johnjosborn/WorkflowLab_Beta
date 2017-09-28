@@ -61,7 +61,7 @@ if (isset($_POST['wkf_ID'])){
 
                 $sql =  "SELECT  OPS_title, OPS_desc, OPS_detail
                             FROM	OPS
-                            WHERE 	OPS_id = '$opID' AND OPS_CUS_id = '$custID'";
+                            WHERE 	OPS_id = '$opID' AND (OPS_CUS_id = '$custID' OR OPS_CUS_id ='99')";
 
                 $result = mysqli_query($conn,$sql);
 
@@ -78,8 +78,6 @@ if (isset($_POST['wkf_ID'])){
                         $stmt->bind_param("isssis", $seq, $status, $title, $desc, $tempWorkflow, $detail);
 
                         $stmt->execute();
-
-                        //$output .= $seq . "_|_" .  $status . "_|_" . $title . "_|_" . $desc . "_|_" . $tempWorkflow. "_|_" . $detail;
                     }
 
                 }
@@ -157,9 +155,9 @@ if (isset($_POST['wkf_ID'])){
 
                 //verified empty set posted, remove all steps
 
-                $sql = "DELETE  
+                $sql = "DELETE 
                 FROM STP
-                WHERE STP_WKF_id = '$wkfID'";
+                WHERE STP_WFL_id = '$wkfID'";
 
                 $result=mysqli_query($conn,$sql);
 

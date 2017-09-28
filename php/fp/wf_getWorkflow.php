@@ -36,9 +36,7 @@ if (isset($_POST['wf_id'])){
 
     if($result){
 
-        $steps = "<div id='accordionHolder' class=''>
-                    <div id='accordianScroll' class='container scrollable'>
-                    <div id='stepAccordian' class=''>";
+        $steps = "";
 
         if($result->num_rows != 0){
 
@@ -108,7 +106,7 @@ if (isset($_POST['wf_id'])){
 
         }
 
-        $steps .= "</div></div>";
+        $steps .= "";
 
     } else {
         $output = "Bad query steps"; 
@@ -140,9 +138,8 @@ if (isset($_POST['wf_id'])){
 
 
 
-$output = "<div class='contentTitle' id='activeTitle'>
+$output = " <div class='contentTitle' id='activeTitle'>
                 <div>Workflow#&nbsp$wfNum&nbsp&nbspItem:&nbsp$wfItem</div>
-            </div>
             </div>
             <div class='contentHolder'>
                 <div id='wfHeader'>
@@ -152,7 +149,11 @@ $output = "<div class='contentTitle' id='activeTitle'>
                         </div>
                     </div>
                 </div>
-                $steps
+                <hr>
+                <div id='accordianScroll' class='container scrollable'>
+                <div id='stepAccordian' class=''>
+                    $steps
+                </div>
             </div>";
 
 echo $output;

@@ -28,6 +28,7 @@ textarea{
     height: 3em;
     background: none;
     border-bottom: none;
+    margin: .2em 0 0 0;
 }
 
 #container{
@@ -37,10 +38,10 @@ textarea{
     position: relative;
 }
 
-#container > div{
+/* #container > div{
     margin: 0;
     height: 100%;
-}
+} */
 
 #controls{
     width: 25%;
@@ -54,15 +55,15 @@ textarea{
 
 #controlShow{
     position: absolute;
-    top: .5em;
-    left: .5em;
+    top: .75em;
+    left: .75em;
     z-index: 1;
 }
 
 #controlHide{
     position: absolute;
-    top: .5em;
-    right: .5em;
+    top: .75em;
+    right: 1em;
     z-index: 1;
 }
 
@@ -89,14 +90,14 @@ textarea{
 }
 
 .contentTitle{
-    background: #000000;
+    background: linear-gradient( #444, #333);
     margin: 0 auto;
     display: block;
     padding: .2em 3em;
     border-radius: 5px 5px 0 0;
     border: 1px solid #666;
     border-bottom: none;
-    font-size: 1.5em;
+    font-size: 1.25em;
     text-align: center;
     font-family: 'Open Sans Condensed', sans-serif;
     color: white;
@@ -106,10 +107,12 @@ textarea{
     background: linear-gradient( #bbb, #eee);
     border-radius: 0 0 10px 10px;
     border: 1px solid #666;
-    padding: 1em 2em;
+    padding: 1em 1.5em;
     max-height: 88%;
-    overflow: auto;
+    overflow: hidden;
     margin: 0 0 1em 0;
+    font-family: 'Open Sans Condensed', sans-serif;
+    height: 100%;
 }
 
 .inputTable{
@@ -145,7 +148,7 @@ textarea{
 }
 
 .listTable{
-    margin: 1em auto;
+    margin: .5em auto;
     background: white;
     width: 100%;
     cursor: pointer;
@@ -199,6 +202,7 @@ table.tablesorter thead tr .headerSortUp {
 	background-image: url(../media/asc.gif);
 	background-color: #4B8DFE;
 }
+
 table.tablesorter thead tr .headerSortDown {
 	background-image: url(../media/desc.gif);
 	background-color: #4B8DFE;
@@ -250,6 +254,12 @@ table.tablesorter thead tr .headerSortDown {
     border-radius: 0;
     background: none;
     padding: 0 0 0 1em;
+    margin: .5em 0 0 0;
+}
+
+#contentHolder{
+    height: 30%;
+    overflow: hidden;
 }
 
 .accd_header{
@@ -259,6 +269,7 @@ table.tablesorter thead tr .headerSortDown {
     border-radius: 2px;
     color: #fff;
     font-size: 1.1em;
+    cursor: pointer;
 }
 
 .accd_header_selected{
@@ -282,6 +293,7 @@ table.tablesorter thead tr .headerSortDown {
 .temp{
     color: #E26600;
 }
+
 .accd_content{
     background: none;
     padding: .25em 0 0 0;
@@ -291,6 +303,10 @@ table.tablesorter thead tr .headerSortDown {
     margin: 0;
     padding: 0;
     display: none;
+}
+
+#activeContent{
+    padding-bottom: 1em;
 }
 
 /* RADIO BUTTONS */
@@ -312,6 +328,7 @@ table.tablesorter thead tr .headerSortDown {
     background: linear-gradient( #333, #444);
     border: none;
     color: #fff;
+    cursor: pointer;
 }
 
 .selectRadioNew{
@@ -324,6 +341,7 @@ table.tablesorter thead tr .headerSortDown {
     background: linear-gradient( #00BB06, #00A000);
     border: none;
     color: #fff;
+    cursor: pointer;
 }
 
 .inputControl{
@@ -355,8 +373,18 @@ table.tablesorter thead tr .headerSortDown {
 
 /* BUTTON STYLING */
 
-.button, .ui-widget input{
-    margin: .5em .5em;
+.ui-widget input{
+    margin: 0;
+    padding: .25em .5em;
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 3px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: .9em;
+    text-decoration: none;
+}
+.button{
+    margin: .5em;
     padding: .25em .5em;
     -webkit-border-radius: 6;
     -moz-border-radius: 6;
@@ -373,7 +401,7 @@ table.tablesorter thead tr .headerSortDown {
     background-image: -ms-linear-gradient(top, #747474, #575757 );
     background-image: -o-linear-gradient(top, #747474, #575757 );
     background-image: linear-gradient(to bottom, #747474, #575757 );
-    text-decoration: none;
+    color: #fff;
 }
 
 .buttonGray:hover{
@@ -383,7 +411,6 @@ table.tablesorter thead tr .headerSortDown {
     background-image: -ms-linear-gradient(top, #9B9B9B,  #747474);
     background-image: -o-linear-gradient(top, #9B9B9B,  #747474);
     background-image: linear-gradient(to bottom, #9B9B9B,  #747474);
-    text-decoration: none;    
 }
 
 .buttonRed{
@@ -403,7 +430,6 @@ table.tablesorter thead tr .headerSortDown {
     background-image: -ms-linear-gradient(top, #FF8F8F,  #FE5B5B);
     background-image: -o-linear-gradient(top, #FF8F8F,  #FE5B5B);
     background-image: linear-gradient(to bottom, #FF8F8F,  #FE5B5B);
-    text-decoration: none;    
 }
 
 .buttonBlue{
@@ -466,7 +492,7 @@ table.tablesorter thead tr .headerSortDown {
     height: 1em;
     margin: .5em 2em;
     background: #999;
-  }
+}
 
 .progressText {
     position: absolute;
@@ -475,7 +501,7 @@ table.tablesorter thead tr .headerSortDown {
     bottom: 10%;
     font-weight: bold;
     font-family: 'Open Sans Condensed', sans-serif;
-  }
+}
 
 .ui-progressbar-value{
     background: #7cd85b;
@@ -487,28 +513,36 @@ table.tablesorter thead tr .headerSortDown {
 .stepOpen{
     background-color: #2969d1;
     color: white; 
- }
+}
  
  .stepPending{
     background-color: #999;
     color: black; 
- }
+}
  
  .stepComplete{
     background-color: #7cd85b;
     color: black; 
- }
+}
  
  .stepDelete{
      background-color: #E66666;
      color: black;   
- }
+}
 
 /* WORKFLOW ACCORDIAN DISPLAY */
+
 #stepAccordian{
     padding: .2em;
     font-size: 1em;
     font-family: 'Open Sans Condensed', sans-serif;
+}
+
+#accordianScroll{
+    overflow-y: scroll;
+    height: 90%;
+    background: none;
+    margin: 1em 0;
 }
 
 .ui-accordion .ui-accordion-content{
@@ -542,12 +576,13 @@ table.tablesorter thead tr .headerSortDown {
     margin: .2em 0;
     font-family: 'Open Sans Condensed', sans-serif;
     text-align: left;
+    cursor: pointer;
 }
 
 .opsHead{
     margin: 0 auto;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.25em;
     font-weight: bold;
     font-family: 'Open Sans Condensed', sans-serif;
 }
@@ -712,6 +747,7 @@ table.tablesorter thead tr .headerSortDown {
 
 .dataInputDiv .textTableInput{
     box-sizing: border-box;
+    margin: 0;
     width: 100%;
     height: 100%;
     padding: .1em .5em;;

@@ -70,7 +70,7 @@ if (isset($_POST['search_type'])){
 
     if($result->num_rows != 0){
 
-        $output .= "<table id='stepList' class='listTable tablesorter'>
+        $output .= "<table id='opList' class='listTable tablesorter'>
         <thead>
             <tr>
                 <th>Title</th>
@@ -91,7 +91,7 @@ if (isset($_POST['search_type'])){
             $opType = $row['OPS_type'];
             $opSta = $row['OPS_status'];
 
-            $output .= "<tr onclick='editStep($opID)'>
+            $output .= "<tr onclick='editOp($opID)'>
                 <td>$opTitle</td>
                 <td>$opDesc</td>
                 <td>$opDetail</td>
