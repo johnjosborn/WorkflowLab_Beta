@@ -539,7 +539,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 #accordianScroll{
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 90%;
     background: none;
     margin: 1em 0;

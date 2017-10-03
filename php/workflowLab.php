@@ -82,6 +82,10 @@ echo <<<_FixedHTML
             $("#c1, #c2, #c3, #c4, #activeControl").slideUp();
             $(".selectRadio").css("background", "linear-gradient( #444, #333)");
             $("#currentSelection").val("h0");
+
+            //update content section
+            $("#contentUpdate").hide().fadeIn("slow").html("This is home.");
+
         }
 
         function h1(){  
@@ -280,7 +284,7 @@ echo <<<_FixedHTML
                                 setTimeout(function() {
                                     theOffset = $(self).position();
                                     theNextOffset = $('#stepAccordian').position();
-                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 50}, 1000);
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 1}, 1000);
                                 }, 510); // ensure the collapse animation is done
                             });
 
@@ -289,7 +293,7 @@ echo <<<_FixedHTML
                                 setTimeout(function() {
                                     theOffset = $(self).position();
                                     theNextOffset = $('#stepAccordian').position();
-                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 50}, 1500);
+                                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 1}, 1500);
                                 }, 510); // ensure the collapse animation is done
                             });
 
@@ -447,7 +451,7 @@ echo <<<_FixedHTML
                 setTimeout(function() {
                     theOffset = $(self).position();
                     theNextOffset = $('#stepAccordian').position();
-                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 5}, 1000);
+                    $('#accordianScroll').animate({ scrollTop: theOffset.top - theNextOffset.top + 1}, 1000);
                 }, 510); // ensure the collapse animation is done
             });
 
